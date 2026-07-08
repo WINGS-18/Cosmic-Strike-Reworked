@@ -1,12 +1,18 @@
 #include "game/StatsPool.h"
 
-namespace cs {
+namespace cs::st {
 
-    namespace st {
+    StatsPool::StatsPool() {}
 
-        StatsPool::StatsPool() {}
+    void StatsPool::HPReduction() {
+        if(m_current.m_shield > 0) {
+            m_current.m_shield -= m_current.damageDealer(m_current.m_defense);
+        }
 
-        void StatsPool::HPReduction()
+        if(m_current.m_shield <= 0){
+            m_current.m_hp -= m_current.damageDealer(m_current.m_defense) + m_current.m_shield;
+            m_current.m_shield = 0;
+        }
     }
 
 }
