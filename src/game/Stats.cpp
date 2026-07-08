@@ -17,5 +17,13 @@ namespace cs {
                 }
             }
         }
+
+        int Stats::damageDealer(int def) {
+            if(def < m_attack) {
+                return m_attack * ((100.0f) / (100 + def));     //damage formula scales with defense
+            }else{
+                return 5;
+            }
+        }
     }
 }
