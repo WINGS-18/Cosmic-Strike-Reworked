@@ -1,10 +1,6 @@
 #pragma once
 
-#include "Stats.h"
-
 namespace cs {
-
-    class Character;
 
     namespace st {
 
@@ -14,8 +10,9 @@ namespace cs {
 
             StatsPool();    //constructor
 
-            void HPReduction(Character* obj);   //reduces hp of the entity
-
+            void HPReduction();   //reduces hp of the entity
         };
+
     }
+    
 }
