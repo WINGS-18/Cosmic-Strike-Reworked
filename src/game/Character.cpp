@@ -9,6 +9,8 @@ namespace cs {
     Character::Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny)
         : entityData(ed), isAlive(isAl), m_coord(xny) {}
 
+    Character::~Character() {}
+
     const bool Character::getIsAlive() const {      //returns weather the character is alive or not
         return isAlive;
     }

@@ -30,6 +30,8 @@ namespace cs {
         Character();
         Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny);
 
+        virtual ~Character() = default;
+
         const bool getIsAlive() const;      //returns weather character is alive or not
 
         const void deathCondition();        //changes the m_isAlive flag
