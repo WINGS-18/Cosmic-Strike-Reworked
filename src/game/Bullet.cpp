@@ -3,7 +3,7 @@
 namespace cs::Arsernal {
 
     Bullet::Bullet() 
-        : m_val(0) {}
+        : m_val(14) {}
 
     Bullet::Bullet(int val) 
         : m_val(val) {}
