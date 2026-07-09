@@ -36,4 +36,8 @@ namespace Eng {
         return {x - other.x, y - other.y};
     }
 
+    void Vector2C::yCoordinateUpdate() {
+        y += 2;
+    }
+
 }
