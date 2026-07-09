@@ -33,28 +33,31 @@
 
 namespace cs {
 
-    namespace Arsernal {
+  namespace Arsernal {
 
-        struct Bullet;
+      struct Bullet;
 
-        class Gun {
-        public:
-            std::deque<Bullet> m_active;
-            std::vector<Bullet> m_inactive;
+      class Gun {
+      public:
+        std::deque<Bullet> m_active;
+        std::vector<Bullet> m_inactive;
 
-            Gun() {}
+        Gun() {}
 
-            void bulletLoading(std::vector<Bullet>& bul);      //loads the bullets acts as an init method
+        void bulletLoading(std::vector<Bullet>& bul);      //loads the bullets acts as an init method
 
-            Bullet inactive_pop(const Eng::Vector2C& host);     //pops the bullet from inactive container
+        Bullet inactive_pop(const Eng::Vector2C& host);     //pops the bullet from inactive container
 
-            Bullet active_pop();        //pops the bullet from active container and rerturns it
+        Bullet active_pop();        //pops the bullet from active container and rerturns it
 
-            void inactive_push();       //pushes the bullet into the inactive container
+        void inactive_push();       //pushes the bullet into the inactive container
 
-            void active_push(const Eng::Vector2C& host);        //pushes the bullets into active container
+        void active_push(const Eng::Vector2C& host);        //pushes the bullets into active container
 
-            void bulletAdder(const Eng::Vector2C& host, char key);        //performs rotation
-        };
-    }
+        void bulletAdder(const Eng::Vector2C& host, char key);        //performs rotation
+
+        void bulletMove();    //increments the bullets position making it move
+
+      };
+  }
 }

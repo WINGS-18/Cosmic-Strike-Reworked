@@ -49,4 +49,13 @@ namespace cs::Arsernal {
             active_push(host);
         }
     }
+
+    void Gun::bulletMove() {
+        int height = 20;    //just added for now later will be removed
+        if(!m_active.empty()){
+            for(Bullet& b : m_active) {
+                if(b.m_bulCoord.y <= height - 3)   b.bulletMovement();
+            }
+        }
+    }
 }
