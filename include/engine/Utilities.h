@@ -10,13 +10,13 @@
 
 namespace Utility {
 
-    void reset();
-    void green();
-    void red();
+    void reset();       //reset the color of the texts to default
+    void green();       //changes the color of texts to green
+    void red();         //changes the color of texts to red
 
-    void clearScreen();
-    void hideCursor();
-    void showCursor();
+    void clearScreen();     //clears the terminal
+    void hideCursor();      //hide the cursor
+    void showCursor();      //unhide the cursor
 
-    char keyGiver();
+    char keyGiver();        //returns the key that is pressed
 }
