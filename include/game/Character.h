@@ -14,13 +14,14 @@
 
 #include "StatsPool.h"
 #include "engine/Vector2C.h"
+#include <vector>
 
 namespace cs {
     
     class Character {
     protected:
-        std::vector<std::vector<int>> entityData;     //holds the character layout info
-        bool isAlive;
+        std::vector<std::vector<int>> m_entityData;     //holds the character layout info
+        bool m_isAlive;
         st::StatsPool m_statsMan;         //stats manager
     
     public:
@@ -35,5 +36,7 @@ namespace cs {
         const bool getIsAlive() const;      //returns weather character is alive or not
 
         const void deathCondition();        //changes the m_isAlive flag
+
+        const std::vector<std::vector<int>> getEntityData() const;      //returns entity data
     };
 }

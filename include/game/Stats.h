@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Part.h"
+#include "game/Part.h"
 #include <vector>
 
 namespace cs {
@@ -17,6 +17,8 @@ namespace cs {
 
             //gives the total stats by adding atk, def, hp from individual parts
             void totalStats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
+
+            int damageDealer(int def);      //calculates the total damage dealt
 
         };
 

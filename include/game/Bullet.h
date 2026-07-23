@@ -9,14 +9,15 @@
 
 #pragma once
 #include "engine/Vector2C.h"
+#include <vector>
 
 namespace cs {
 
-    namespace Arsernal {
+    namespace Arsenal {
 
         struct Bullet {
-        int m_val;
-        Eng::Vector2C m_bulCoord;
+            int m_val;
+            Eng::Vector2C m_bulCoord;
 
             //constructor
             Bullet();

@@ -30,12 +30,11 @@
 #include <vector>
 #include <deque>
 #include "engine/Vector2C.h"
+#include "game/Bullet.h"
 
 namespace cs {
 
-  namespace Arsernal {
-
-      struct Bullet;
+  namespace Arsenal {
 
       class Gun {
       public:
@@ -54,7 +53,7 @@ namespace cs {
 
         void active_push(const Eng::Vector2C& host);        //pushes the bullets into active container
 
-        void bulletAdder(const Eng::Vector2C& host, char key);        //performs rotation
+        void bulletAdder(const Eng::Vector2C& host);        //performs rotation
 
         void bulletMove();    //increments the bullets position making it move
 

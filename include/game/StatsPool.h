@@ -1,5 +1,7 @@
 #pragma once
 
+#include "game/Stats.h"
+
 namespace cs {
 
     namespace st {

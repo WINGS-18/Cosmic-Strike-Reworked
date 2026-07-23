@@ -1,8 +1,7 @@
-#include "game/Bullet.h"
 #include "game/Gun.h"
 
 
-namespace cs::Arsernal {
+namespace cs::Arsenal {
 
     void Gun::bulletLoading(std::vector <Bullet>& bul) {
         m_inactive = std::move(bul);
@@ -41,8 +40,8 @@ namespace cs::Arsernal {
         }
     }
 
-    void Gun::bulletAdder(const Eng::Vector2C& host, char key) {
-        if(key == ' ' && !m_inactive.empty()) {
+    void Gun::bulletAdder(const Eng::Vector2C& host) {
+        if(!m_inactive.empty()) {
             active_push(host);
         }else {
             inactive_push();
@@ -54,7 +53,7 @@ namespace cs::Arsernal {
         int height = 20;    //just added for now later will be removed
         if(!m_active.empty()){
             for(Bullet& b : m_active) {
-                if(b.m_bulCoord.y <= height - 3)   b.bulletMovement();
+                if(b.m_bulCoord.y >= 5)   b.bulletMovement();
             }
         }
     }
