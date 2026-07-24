@@ -2,7 +2,6 @@
 #include <iostream>
 #include <conio.h>
 
-
 void Utility::reset() {
     std::cout << "\033[0m";
 }
@@ -30,7 +29,6 @@ void Utility::showCursor() {
 char Utility::keyGiver() {
     if(_kbhit())
         return _getch();
-
     else
         return '\0';
 }

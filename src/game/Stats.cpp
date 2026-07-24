@@ -4,8 +4,11 @@ namespace cs {
 
     namespace st {
 
-        Stats::Stats()      //constructor
-            : m_hp(0), m_attack(0), m_defense(0), m_shield(0) {}
+        Stats::Stats() {}      //constructor
+
+        Stats::Stats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
+            totalStats(entityData, parts);
+        }
 
         void Stats::totalStats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
             for(const auto& row : entityData){

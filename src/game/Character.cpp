@@ -20,4 +20,8 @@ namespace cs {
     const std::vector<std::vector<int>> Character::getEntityData() const{
         return m_entityData;
     }
+
+    void Character::makeAlive() {
+        m_isAlive = true;
+    }
 }

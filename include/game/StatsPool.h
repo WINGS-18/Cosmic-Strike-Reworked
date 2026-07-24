@@ -11,6 +11,7 @@ namespace cs {
             Stats m_current;
 
             StatsPool();    //constructor
+            StatsPool(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
 
             void HPReduction();   //reduces hp of the entity
         };

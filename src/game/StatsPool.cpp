@@ -3,6 +3,7 @@
 namespace cs::st {
 
     StatsPool::StatsPool() {}
+    StatsPool::StatsPool(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {}
 
     void StatsPool::HPReduction() {
         if(m_current.m_shield > 0) {

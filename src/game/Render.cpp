@@ -1,5 +1,6 @@
 #include "game/Render.h"
 #include "engine/Utilities.h"
+#include <windows.h>
 #include <iostream>
 
 namespace cs {
@@ -13,6 +14,7 @@ namespace cs {
 
     void Render::gameLoop(std::vector<Player>& ships, const std::vector<Part>& parts) {
         char key = '\0';
+        Utility::hideCursor();
         while(true) {
             ships[0].gunFire();
             frameReset();
@@ -22,9 +24,10 @@ namespace cs {
             insertEntity(ships, parts);
             insertEntity(ships[0].m_playerGun.m_active, parts);
             drawFrame();
-            _sleep(80);
+            Sleep(80);
             Utility::clearScreen();
         }
+        Utility::showCursor();
     }
 
     void Render::drawFrame() {      //draws the frame/grid
