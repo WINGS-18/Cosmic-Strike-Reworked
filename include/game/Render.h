@@ -61,16 +61,18 @@ namespace cs {
 
         void frameReset();      //reset the grid to blank spaces
         void drawFrame();       //draws the frame on the terminal
-        void gameLoop(std::vector<Player>& ships, const std::vector<Part>& parts);        //main loop that runs the game
+        void gameLoop(std::vector<Player>& ships, const std::vector<Part>& parts, std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies);        //main loop that runs the game
     };
 
     template <typename Entity>
     void Render::insertEntity(const std::vector<Entity>& entities, const std::vector<Part>& parts) {
         for(const auto& e : entities) {
-            int filler = e.m_coord.x * csg_xScale;   //tells where to start
-            for(const auto& row : e.getEntityData()) {
-                for(int i = 0; i < row.size(); i++) {
-                    frame[e.m_coord.y][filler + i] = parts[row[i]].m_symbol;
+            if(e.getIsAlive()) {
+                int filler = e.m_coord.x * csg_xScale;   //tells where to start
+                for(const auto& row : e.getEntityData()) {
+                    for(int i = 0; i < row.size(); i++) {
+                        frame[e.m_coord.y][filler + i] = parts[row[i]].m_symbol;
+                    }
                 }
             }
         }

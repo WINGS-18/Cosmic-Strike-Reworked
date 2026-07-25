@@ -50,10 +50,9 @@ namespace cs::Arsenal {
     }
 
     void Gun::bulletMove() {
-        int height = 20;    //just added for now later will be removed
         if(!m_active.empty()){
             for(Bullet& b : m_active) {
-                if(b.m_bulCoord.y >= 5)   b.bulletMovement();
+                if(b.m_bulCoord.y > 0)   b.bulletMovement();
             }
         }
     }

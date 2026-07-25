@@ -24,4 +24,6 @@ namespace cs::GameData {
     void enemyMaker(std::vector<Enemy>& deadEnemies, const std::vector<std::vector<int>>& enemyData, const std::vector<int>& randomPool, const std::vector<Part>& parts, int y);
     void enemyBirth(std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies);
 
+    void enemyMove(std::vector<Enemy>& aliveEnemies);
+
 }

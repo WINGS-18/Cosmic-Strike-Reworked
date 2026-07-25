@@ -68,7 +68,8 @@ namespace cs::GameData {
             {13}, {14}, {13}, {14}, {13}, 
             {14}, {13}, {14}, {13}, {14}, 
             {13}, {14}, {13}, {14}, {13}, 
-            {14}, {13}, {14}, {13}, {14} 
+            {14}, {13}, {14}, {13}, {14},
+            {13}, {14}, {13}, {14}
         }; 
     }
 
@@ -95,5 +96,12 @@ namespace cs::GameData {
         obj.makeAlive();
         aliveEnemies.push_back(obj);
         deadEnemies.pop_back();
+    }
+
+    void enemyMove(std::vector<Enemy>& aliveEnemies) {
+        for(auto& enemy : aliveEnemies) {
+            if(enemy.m_coord.y < 24)
+                enemy.m_coord.yCoordinateUpdate();
+        }
     }
 }

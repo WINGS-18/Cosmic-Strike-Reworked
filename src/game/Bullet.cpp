@@ -10,7 +10,7 @@ namespace cs::Arsenal {
 
     void Bullet::coordinateModifier(const Eng::Vector2C& host) {   //modifies bullets coordinates
         m_bulCoord.x = host.x;
-        m_bulCoord.y = host.y - 2;
+        m_bulCoord.y = host.y - 1;      //fix : bullets now spwan closer to the user
     }
 
     void Bullet::bulletMovement() {     //increments the bullet position on y axis
