@@ -24,4 +24,8 @@ namespace cs {
     void Character::makeAlive() {
         m_isAlive = true;
     }
+
+    void Character::makeDead() {
+        m_isAlive = false;
+    }
 }

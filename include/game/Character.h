@@ -40,5 +40,7 @@ namespace cs {
         const std::vector<std::vector<int>> getEntityData() const;      //returns entity data
 
         void makeAlive();
+
+        void makeDead();
     };
 }

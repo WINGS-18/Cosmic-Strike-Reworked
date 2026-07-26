@@ -13,6 +13,7 @@ namespace cs {
 
             Collision();
 
+            bool collisionDetector(std::vector<Player>& user, std::vector<Enemy>& enemies);
             
         };
     }
