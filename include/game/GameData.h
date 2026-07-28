@@ -11,12 +11,15 @@
 
 #include "game/Player.h"
 #include "game/Enemy.h"
+#include "game/Event.h"
 
 namespace cs::GameData {
 
     std::vector<Part> getParts();     //returns all game parts
     std::vector<std::vector<int>> getUserLayout();        //returns user appearence map(vector)
     std::vector<std::vector<int>> getEnemyLayout();       //returns enemy appearence map(vector)
+    std::vector<std::vector<int>> enemLay();
+    std::vector<col::Event> makeEventPool();
 
     std::vector<Arsenal::Bullet> bulletLayout();      //returns bullet map(vector)
     std::vector<int> xCoordinateMaker(int n);       //returns vector of 'n' random numbers

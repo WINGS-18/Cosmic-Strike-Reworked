@@ -3,7 +3,8 @@
 
 namespace cs::Arsenal {
 
-    void Gun::bulletLoading(std::vector <Bullet>& bul) {
+    //fix : parameter lvalue -> rvaule
+    void Gun::bulletLoading(std::vector <Bullet>&& bul) {
         m_inactive = std::move(bul);
     }
 

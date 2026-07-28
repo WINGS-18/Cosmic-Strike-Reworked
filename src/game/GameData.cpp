@@ -73,6 +73,13 @@ namespace cs::GameData {
         }; 
     }
 
+    std::vector<std::vector<int>> enemLay() {return {{14, 1, 10, 5, 14}};}
+
+    std::vector<col::Event> makeEventPool() {
+        std::vector<col::Event> eventPool(10);
+        return eventPool;
+    }
+
     std::vector<int> xCoordinateMaker(int n) {
         std::vector <int> randomPool;
         std::random_device rd;
