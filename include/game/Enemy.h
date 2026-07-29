@@ -13,5 +13,7 @@ namespace cs {
     class Enemy : public Character {
     public:
         using Character::Character;
+
+        void survivalCheck(Character* p);
     };
 }

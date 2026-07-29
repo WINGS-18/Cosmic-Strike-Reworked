@@ -10,3 +10,8 @@
 
 
 #include "game/Enemy.h"
+
+void cs::Enemy::survivalCheck(Character* obj) {
+    HPReduction(obj);
+    deathCondition();
+}

@@ -18,11 +18,15 @@ namespace cs {
 
             Collision(std::vector<Event>&& active);
 
-            void addEvent(void* ptr1, possibleAgents type1, void* ptr2, possibleAgents type2);
+            void addEvent(Enemy* ePtr, Player* uPtr, possibleAgents type);
 
             void clearEvents();
 
-            bool collisionDetector(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user);
+            void collisionDetector(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user);
+
+            void processAllEvents();
+
+            void collisionHandler(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user);
 
         };
     }

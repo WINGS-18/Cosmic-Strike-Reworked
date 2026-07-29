@@ -1,28 +1,45 @@
 #include "game/Event.h"
+#include "game/Enemy.h"
+#include "game/Player.h"
 
 namespace cs::col {
 
     void Event::eventReset() {
-        a1.agentReset();
-        a2.agentReset();
+        a.agentReset();
     }
 
-    void Event::setAgent(void* ptr1, possibleAgents type1, void* ptr2, possibleAgents type2) {
-        a1.agentSetter(ptr1, type1);
-        a2.agentSetter(ptr2, type2);
+    void Event::setAgent(Enemy* ePtr, Player* uPtr, possibleAgents type) {
+        a.agentSetter(ePtr, uPtr, type);
     }
 
-    void Event::Agent::agentSetter(void* ptr, possibleAgents type) {
-        m_entityPtr = ptr;
-        m_entityType = type;
+    void Event::processEvent() {
+        switch(a.m_interactionType) {
+            case possibleAgents::Enemy_vs_Player :
+                a.m_enemyPtr->makeDead();
+                a.m_userPtr->survivalCheck(a.m_enemyPtr);
+                break;
+
+            case possibleAgents::Enemy_vs_Bullet :
+                a.m_enemyPtr->survivalCheck(a.m_userPtr);
+                break;
+
+            default :
+                break;
+        }
     }
 
-    const Event::Agent& Event::get_a1() const {return a1;}
-    const Event::Agent& Event::get_a2() const {return a2;}
+    void Event::Agent::agentSetter(Enemy* ePtr, Player* uPtr, possibleAgents type) {
+        m_enemyPtr = ePtr;
+        m_userPtr = uPtr;
+        m_interactionType = type;
+    }
+
+    const Event::Agent& Event::get_agent () const {return a;}
 
     void Event::Agent::agentReset() {
-        m_entityPtr = nullptr;
-        m_entityType = possibleAgents::none;
+        m_enemyPtr = nullptr;
+        m_userPtr = nullptr;
+        m_interactionType = possibleAgents::None;
     }
 
 }

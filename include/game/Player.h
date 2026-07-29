@@ -23,5 +23,7 @@ namespace cs {
         void userMovement(char key);        //makes user move or interact based on the keyboard inputs
 
         void gunFire();
+
+        void survivalCheck(Character* obj);
     };
 }

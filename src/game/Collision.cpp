@@ -6,8 +6,8 @@ namespace cs::col {
     Collision::Collision(std::vector<Event>&& active)
         : m_activeEvents(std::move(active)) {}
 
-    void Collision::addEvent(void* ptr1, possibleAgents type1, void* ptr2, possibleAgents type2) {
-        m_inactiveEvents.back().setAgent(ptr1, type1, ptr2, type2);
+    void Collision::addEvent(Enemy* ePtr, Player* uPtr, possibleAgents type) {
+        m_inactiveEvents.back().setAgent(ePtr, uPtr, type);
         auto e = m_inactiveEvents.back();
         m_activeEvents.push_back(e);
         m_inactiveEvents.pop_back();
@@ -23,21 +23,31 @@ namespace cs::col {
         }
     }
 
-    bool Collision::collisionDetector(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user) {
+    void Collision::collisionDetector(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user) {
         int height = 25;
         for(Enemy obj : aliveEnemies) { 
             if(obj.getIsAlive()) { 
                 if(obj.m_coord.y == user[0].m_coord.x) {
-                    addEvent(&obj, col::possibleAgents::enemy, &user[0], col::possibleAgents::player);
+                    addEvent(&obj, &user[0], col::possibleAgents::Enemy_vs_Player);
                 } else if(!user[0].m_playerGun.m_active.empty()) { 
                     for(Arsenal::Bullet& b : user[0].m_playerGun.m_active) { 
                         if(obj.m_coord.x == b.m_bulCoord.x && obj.m_coord.y == b.m_bulCoord.y) { 
-                            addEvent(&obj, col::possibleAgents::enemy, &b, col::possibleAgents::bullet);
+                            addEvent(&obj, &user[0], col::possibleAgents::Enemy_vs_Bullet);
                         }
                     }
                 }
             }
         }
-        //return collision;
+    }
+
+    void Collision::processAllEvents() {
+        for(Event& e : m_activeEvents) {
+            e.processEvent();
+        }
+    }
+
+    void Collision::collisionHandler(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user) {
+        collisionDetector(aliveEnemies, user);
+        clearEvents();
     }
 }

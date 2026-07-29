@@ -31,4 +31,9 @@ namespace cs {
         m_playerGun.bulletMove();
         m_playerGun.bulletAdder(m_coord);
     }
+
+    void Player::survivalCheck(Character* obj) {
+        HPReduction(obj);
+        deathCondition();
+    }
 }

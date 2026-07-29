@@ -2,37 +2,42 @@
 
 namespace cs {
 
+    class Enemy;
+    class Player;
+
     namespace col {
 
-        enum class possibleAgents {enemy, player, bullet, none};
+        enum class possibleAgents {Enemy_vs_Player, Enemy_vs_Bullet, None};
         
         class Event {
         private:
             
             struct Agent {
 
-                void* m_entityPtr = nullptr;
-                possibleAgents m_entityType = possibleAgents::none;
+                Enemy* m_enemyPtr = nullptr;
+                Player* m_userPtr = nullptr;
+                possibleAgents m_interactionType = possibleAgents::None;
 
                 Agent() = default;
-                void agentSetter(void* ptr, possibleAgents type);
+                void agentSetter(Enemy* ePtr, Player* uPtr, possibleAgents type);
 
                 void agentReset();
+
             };
 
-            Agent a1;
-            Agent a2;
+            Agent a;
 
         public:
 
             Event() = default;
             
-            const Agent& get_a1() const;
-            const Agent& get_a2() const;
+            const Agent& get_agent() const;
 
-            void setAgent(void* ptr1, possibleAgents type1, void* ptr2, possibleAgents type2);
+            void setAgent(Enemy* ePtr, Player* uPtr, possibleAgents type);
 
             void eventReset();
+
+            void processEvent();
             
         };
 

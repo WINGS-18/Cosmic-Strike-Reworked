@@ -14,11 +14,26 @@ namespace cs {
     }
 
     const void Character::deathCondition() {
-        if(m_statsMan.m_current.m_hp <= 0)  m_isAlive = false;
+        if(m_statsMan.m_current.m_hp <= 0)  makeDead();
     }
 
     const std::vector<std::vector<int>> Character::getEntityData() const{
         return m_entityData;
+    }
+
+    st::StatsPool& Character::getStatsManager() {
+        return m_statsMan;
+    }
+
+    void Character::HPReduction(Character* obj) {
+        if(m_statsMan.m_current.m_shield > 0) {
+            m_statsMan.m_current.m_shield -= obj->m_statsMan.m_current.damageDealer(m_statsMan.m_current.m_defense);      //shield takes damage first.
+        }
+
+        if(m_statsMan.m_current.m_shield <= 0){        //after shield becomes 0 or less, damage is dealt to HP.
+            m_statsMan.m_current.m_hp -= m_statsMan.m_current.damageDealer(m_statsMan.m_current.m_defense) + m_statsMan.m_current.m_shield;
+            m_statsMan.m_current.m_shield = 0;
+        }
     }
 
     void Character::makeAlive() {

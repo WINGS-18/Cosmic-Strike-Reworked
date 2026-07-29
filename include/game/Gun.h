@@ -43,7 +43,7 @@ namespace cs {
 
         Gun() {}
 
-        void bulletLoading(std::vector<Bullet>& bul);      //loads the bullets acts as an init method
+        void bulletLoading(std::vector<Bullet>&& bul);      //loads the bullets acts as an init method
 
         Bullet inactive_pop(const Eng::Vector2C& host);     //pops the bullet from inactive container
 
