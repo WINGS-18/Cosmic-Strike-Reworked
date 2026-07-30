@@ -1,0 +1,1310 @@
+﻿=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\engine\Utilities.cpp ===
+#include "engine/Utilities.h"
+#include <iostream>
+#include <conio.h>
+
+void Utility::reset() {
+    std::cout << "\033[0m";
+}
+
+void Utility::red() {
+    std::cout << "\033[31m";
+}
+
+void Utility::green() {
+    std::cout << "\033[92m";
+}
+
+void Utility::clearScreen() {
+    std::cout << "\033[2J\033[H";
+}
+
+void Utility::hideCursor() {
+    std::cout << "\033[?25l";
+}
+
+void Utility::showCursor() {
+    std::cout << "\033[?25h";
+}
+
+char Utility::keyGiver() {
+    if(_kbhit())
+        return _getch();
+    else
+        return '\0';
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\engine\Vector2C.cpp ===
+#include "engine/Vector2C.h"
+
+namespace Eng {
+
+    Vector2C::Vector2C()        //defualt constructor
+        : x(0), y(0) {}
+
+    Vector2C::Vector2C(int con_x, int con_y)        //parameterised constructor
+        : x(con_x), y(con_y) {}
+    
+    bool Vector2C::operator ==(const Vector2C& other) const {       //overloaded '==' operator
+        return (x == other.x && y == other.y);
+    }
+
+    bool Vector2C::operator <(const Vector2C& other) const {        //overloaded '<' operator
+        return (x < other.x && y < other.y);
+    }
+
+    bool Vector2C::operator >(const Vector2C& other) const {        //overloaded '>' operator
+        return (x > other.x && y > other.y);
+    }
+
+    bool Vector2C::operator <=(const Vector2C& other) const {       //overloaded '<=' operator
+        return (x <= other.x && y <= other.y);
+    }
+
+    bool Vector2C::operator >=(const Vector2C& other) const {       //overloaded '>=' operator
+        return (x >= other.x && y >= other.y);
+    }
+
+    Vector2C Vector2C::operator +(const Vector2C& other) const {        //overloaded '+' operator
+        return {x + other.x, y + other.y};
+    }
+
+    Vector2C Vector2C::operator -(const Vector2C& other) const {        //overloaded '-' operator
+        return {x - other.x, y - other.y};
+    }
+
+    void Vector2C::yCoordinateUpdate() {
+        y += 2;
+    }
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Bullet.cpp ===
+#include "game/Bullet.h"
+
+namespace cs::Arsenal {
+
+    Bullet::Bullet() 
+        : m_val(14) {}
+
+    Bullet::Bullet(int val) 
+        : m_val(val) {}
+
+    void Bullet::coordinateModifier(const Eng::Vector2C& host) {   //modifies bullets coordinates
+        m_bulCoord.x = host.x;
+        m_bulCoord.y = host.y - 1;      //fix : bullets now spwan closer to the user
+    }
+
+    void Bullet::bulletMovement() {     //increments the bullet position on y axis
+        m_bulCoord.y -= 1;      //moves the bullets
+    }
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Character.cpp ===
+#include "game/Character.h"
+
+namespace cs {
+
+    //constructors
+
+    Character::Character() {}
+
+    Character::Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, const std::vector<Part>& parts)
+        : m_entityData(ed), m_isAlive(isAl), m_coord(xny) {fetchStats(parts);}
+
+    const bool Character::getIsAlive() const {      //returns weather the character is alive or not
+        return m_isAlive;
+    }
+
+    void Character::deathCondition() {
+        if(m_statsMan.m_current.m_hp <= 0)  makeDead();
+    }
+
+    const std::vector<std::vector<int>> Character::getEntityData() const{
+        return m_entityData;
+    }
+
+    st::StatsPool& Character::getStatsManager() {
+        return m_statsMan;
+    }
+
+    void Character::HPReduction(Character* obj) {
+        if(m_statsMan.m_current.m_shield > 0) {
+            m_statsMan.m_current.m_shield -= obj->m_statsMan.m_current.damageDealer(m_statsMan.m_current.m_defense);      //shield takes damage first.
+        }
+
+        if(m_statsMan.m_current.m_shield <= 0){        //after shield becomes 0 or less, damage is dealt to HP.
+            m_statsMan.m_current.m_hp -= m_statsMan.m_current.damageDealer(m_statsMan.m_current.m_defense) + m_statsMan.m_current.m_shield;
+            m_statsMan.m_current.m_shield = 0;
+        }
+    }
+
+    void Character::fetchStats(const std::vector<Part>& parts) {
+        m_statsMan.m_base.totalStats(m_entityData, parts);
+        m_statsMan.m_current.totalStats(m_entityData, parts);
+    }
+
+    void Character::makeAlive() {
+        m_isAlive = true;
+    }
+
+    void Character::makeDead() {
+        m_isAlive = false;
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Collision.cpp ===
+#include "game/Collision.h"
+
+namespace cs::col {
+
+    Collision::Collision(std::vector<Event>&& inactive)
+        : m_inactiveEvents(std::move(inactive)) {}
+
+    void Collision::addEvent(Enemy* ePtr, Player* uPtr, possibleAgents type) {
+        m_activeEvents.push_back(m_inactiveEvents.back());
+        m_activeEvents.back().setAgent(ePtr, uPtr, type);
+        m_inactiveEvents.pop_back();
+    }
+
+    void Collision::clearEvents() {
+        size_t size = m_activeEvents.size();
+        for(size_t i = 0; i < size; i++) {
+            m_inactiveEvents.push_back(m_activeEvents.back());
+            m_inactiveEvents.back().eventReset();
+            m_activeEvents.pop_back();
+        }
+    }
+
+    void Collision::collisionDetector(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user) {
+        for(Enemy& obj : aliveEnemies) {
+            if(obj.getIsAlive()) {
+                if(obj.m_coord.y == user[0].m_coord.y) {
+                    addEvent(&obj, &user[0], col::possibleAgents::Enemy_vs_Player);
+                } else if(!user[0].m_playerGun.m_active.empty()) { 
+                    for(Arsenal::Bullet& b : user[0].m_playerGun.m_active) { 
+                        if(obj.m_coord == b.m_bulCoord) { 
+                            addEvent(&obj, &user[0], col::possibleAgents::Enemy_vs_Bullet);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void Collision::processAllEvents() {
+        for(size_t i = 0; i < m_activeEvents.size(); i++) {
+            m_activeEvents[i].processEvent();
+        }
+    }
+
+    void Collision::collisionHandler(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user) {
+        collisionDetector(aliveEnemies, user);
+        processAllEvents();
+        clearEvents();
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Enemy.cpp ===
+/*
+*@file Enemy.cpp.
+
+* This file is currently empty because
+  the base class Character and Enemy both
+  have same members and it even uses same
+  constructor. Not even new methods currently..
+*/
+
+
+
+#include "game/Enemy.h"
+
+void cs::Enemy::survivalCheck(Character* obj) {
+    HPReduction(obj);
+    deathCondition();
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Event.cpp ===
+#include "game/Event.h"
+#include "game/Enemy.h"
+#include "game/Player.h"
+
+namespace cs::col {
+
+    void Event::eventReset() {
+        a.agentReset();
+    }
+
+    void Event::setAgent(Enemy* ePtr, Player* uPtr, possibleAgents type) {
+        a.agentSetter(ePtr, uPtr, type);
+    }
+
+    void Event::processEvent() {
+        switch(a.m_interactionType) {
+            case possibleAgents::Enemy_vs_Player :
+                a.m_enemyPtr->makeDead();
+                a.m_userPtr->survivalCheck(a.m_enemyPtr);
+                break;
+
+            case possibleAgents::Enemy_vs_Bullet :
+                a.m_enemyPtr->survivalCheck(a.m_userPtr);
+                break;
+
+            default :
+                break;
+        }
+    }
+
+    void Event::Agent::agentSetter(Enemy* ePtr, Player* uPtr, possibleAgents type) {
+        m_enemyPtr = ePtr;
+        m_userPtr = uPtr;
+        m_interactionType = type;
+    }
+
+    const Event::Agent& Event::get_agent () const {return a;}
+
+    void Event::Agent::agentReset() {
+        m_enemyPtr = nullptr;
+        m_userPtr = nullptr;
+        m_interactionType = possibleAgents::None;
+    }
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\GameData.cpp ===
+#include "game/GameData.h"
+#include <random>
+
+namespace cs::GameData {
+
+    std::vector<Part> getParts() { 
+        return {
+            Part('^', 25, 30, 0, 0), 
+            Part('<', 25, 5, 5, 0), 
+            Part('{', 25, 5, 5, 1), 
+            Part('T', 40, 0, 10, 10), 
+            Part('}', 25, 5, 5, 1), 
+            Part('>', 25, 5, 5, 0), 
+            Part('(', 30, 0, 20, 3), 
+            Part('@', 30, 10, 0, 20), 
+            Part(')', 30, 0, 20, 3), 
+            Part('[', 30, 0, 10, 3), 
+            Part('*', 20, 5, 5, 10), 
+            Part(']', 30, 0, 10, 5), 
+            Part('-', 40, 20, 15, 10), 
+            Part('!', 0, 0, 0, 0), 
+            Part(' ', 0, 0, 0, 0) 
+        }; 
+    } 
+
+    std::vector<std::vector<int>> getUserLayout() { 
+        return {{1, 2, 0, 4, 5}}; 
+    } 
+
+    std::vector<std::vector<int>> getEnemyLayout() { 
+        return {{14, 1, 12, 5, 14}}; 
+    }
+    
+    /*
+    Constructor overload resolution failure :
+
+        Error message : "no instance of constructor [...] matches the argument list".
+
+        If such a errror arrives it means that the complier cannot determine the type
+        and is getting confused with the nested braces.
+
+        example :
+
+            const std::vector<Arsenal::Bullet> bulletLayout() { 
+                return { 
+                    {13, {0, 1}}, {14, {0, 1}}, {13, {0, 1}}, {14, {0, 1}}, {13, {0, 1}}, 
+                    {14, {0, 1}}, {13, {0, 1}}, {14, {0, 1}}, {13, {0, 1}}, {14, {0, 1}}, 
+                    {13, {0, 1}}, {14, {0, 1}}, {13, {0, 1}}, {14, {0, 1}}, {13, {0, 1}}, 
+                    {14, {0, 1}}, {13, {0, 1}}, {14, {0, 1}}, {13, {0, 1}}, {14, {0, 1}} 
+                }; 
+            }
+
+    Fix : Given below.
+    
+
+    std::vector<Arsenal::Bullet> bulletLayout() { 
+        return { 
+            Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, 
+            Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, 
+            Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, 
+            Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}}, Arsenal::Bullet{13, {0, 1}}, Arsenal::Bullet{14, {0, 1}} 
+        }; 
+    }
+    */
+
+    std::vector<Arsenal::Bullet> bulletLayout() { 
+        return { 
+            {13}, {14}, {13}, {14}, {13}, 
+            {14}, {13}, {14}, {13}, {14}, 
+            {13}, {14}, {13}, {14}, {13}, 
+            {14}, {13}, {14}, {13}, {14},
+            {13}, {14}, {13}, {14}
+        }; 
+    }
+
+    std::vector<std::vector<int>> enemLay() {return {{14, 1, 10, 5, 14}};}
+
+    std::vector<col::Event> makeEventPool() {
+        std::vector<col::Event> eventPool(10);
+        return eventPool;
+    }
+
+    std::vector<int> xCoordinateMaker(int n) {
+        std::vector <int> randomPool;
+        std::random_device rd;
+        std::uniform_int_distribution<int> dist(0,4);
+        for(int i = 0; i < n; i++){
+            randomPool.push_back(dist(rd));
+        }
+        return randomPool;
+    }
+
+    void enemyMaker(std::vector<Enemy>& deadEnemies, const std::vector<std::vector<int>>& enemyData, const std::vector<int>& randomPool, const std::vector<Part>& parts, int y) {
+        st::StatsPool stats(enemyData, parts);
+        for(const auto randNum : randomPool){
+            Enemy e(enemyData, false, {randNum, y}, parts);
+            deadEnemies.push_back(e);
+        }
+    }
+
+    void enemyBirth(std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies) {
+        aliveEnemies.push_back(deadEnemies.back());
+        aliveEnemies.back().makeAlive();
+        deadEnemies.pop_back();
+    }
+
+    void enemyMove(std::vector<Enemy>& aliveEnemies) {
+        for(auto& enemy : aliveEnemies) {
+            if(enemy.m_coord.y < 24)
+                enemy.m_coord.yCoordinateUpdate();
+        }
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Gun.cpp ===
+#include "game/Gun.h"
+
+
+namespace cs::Arsenal {
+
+    //fix : parameter lvalue -> rvaule
+    void Gun::bulletLoading(std::vector <Bullet>&& bul) {
+        m_inactive = std::move(bul);
+    }
+
+    Bullet Gun::inactive_pop(const Eng::Vector2C& host) {
+        if(!m_inactive.empty()) {
+            Bullet b = m_inactive.back();
+            m_inactive.pop_back();
+            b.coordinateModifier(host);
+            return b;
+        }
+        return {0};
+    }
+
+    Bullet Gun::active_pop() {
+        if(!m_active.empty()) {
+            Bullet b = m_active.front();
+            m_active.pop_front();
+            return b;
+        }
+        return {0};
+    }
+
+    void Gun::inactive_push() {
+        Bullet b = active_pop();
+        if(b.m_val != 0) {
+            m_inactive.push_back(b);
+        }
+    }
+
+    void Gun::active_push(const Eng::Vector2C& host) {
+        Bullet b = inactive_pop(host);
+        if(b.m_val != 0) {
+            m_active.push_back(b);
+        }
+    }
+
+    void Gun::bulletAdder(const Eng::Vector2C& host) {
+        if(!m_inactive.empty()) {
+            active_push(host);
+        }else {
+            inactive_push();
+            active_push(host);
+        }
+    }
+
+    void Gun::bulletMove() {
+        if(!m_active.empty()){
+            for(Bullet& b : m_active) {
+                if(b.m_bulCoord.y > 0)   b.bulletMovement();
+            }
+        }
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Part.cpp ===
+#include "game/Part.h"
+
+namespace cs {
+
+  //constructor definations
+    Part::Part()
+        : m_symbol(' '), m_healthPoints(0), m_attack(0),
+          m_defense(0), m_shield(0) {}
+
+    Part::Part(char s, int hp, int atk, int def, int sh)
+        : m_symbol(s), m_healthPoints(hp), m_attack(atk),
+          m_defense(def), m_shield(sh) {}
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Player.cpp ===
+#include "game/Player.h"
+#include <iostream>
+
+namespace cs {
+
+    //constructor
+    Player::Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun g, const std::vector<Part>& parts) : Character(ed, isAl, xny, parts) {
+        this->m_playerGun = g;
+        std::cout << "Player created\n";
+    }
+
+    //controls user movement
+    void Player::userMovement(char key) {
+        std::cout << "Entered\n";
+        switch (key) {
+        case 'a':
+            if(m_coord.x > 0)   m_coord.x--;
+            break;
+
+        //fix: key from b -> d && swapped increment and decrement
+        case 'd':
+            if(m_coord.x < 4)   m_coord.x++;
+            break;
+        
+        default:
+            break;
+        }
+    }
+
+    void Player::gunFire() {
+        m_playerGun.bulletMove();
+        m_playerGun.bulletAdder(m_coord);
+    }
+
+    void Player::survivalCheck(Character* obj) {
+        HPReduction(obj);
+        deathCondition();
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Render.cpp ===
+#include "game/Render.h"
+#include "engine/Utilities.h"
+#include "game/GameData.h"
+#include "game/Collision.h"
+#include <windows.h>
+#include <iostream>
+
+namespace cs {
+
+    Render::Render() {}     //constructor
+
+    Render& Render::getRenderer() {     //returns reference of it's own object
+        static Render r;
+        return r;
+    }
+
+    void Render::gameLoop(std::vector<Player>& ships, const std::vector<Part>& parts, std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies) {
+        char key = '\0';
+        int count = 0;
+        col::Collision collisionCheck(GameData::makeEventPool());
+        Utility::hideCursor();
+        while(true) {
+            ships[0].gunFire();
+            frameReset();
+            if(count == 10) {
+                if(!deadEnemies.empty())
+                    GameData::enemyBirth(deadEnemies, aliveEnemies);
+                GameData::enemyMove(aliveEnemies);
+                count = 0;
+            }
+            key = Utility::keyGiver();
+            if(key == 'e')  break;
+            ships[0].userMovement(key);
+            std::cout << ships[0].getIsAlive() << std::endl;
+            collisionCheck.collisionHandler(aliveEnemies, ships);
+            insertEntity(ships, parts);
+            insertEntity(ships[0].m_playerGun.m_active, parts);
+            insertEntity(aliveEnemies, parts);
+            drawFrame();
+            Sleep(80);
+            Utility::clearScreen();
+            count++;
+        }
+        Utility::showCursor();
+    }
+
+    void Render::drawFrame() {      //draws the frame/grid
+        for(const auto& row : frame) {
+            for(const auto& cell : row) {
+                std::cout << cell;
+            }
+            std::cout << "\n";
+        }
+    }
+
+    void Render::frameReset() {     //resets the frame with blank space chars
+        for(auto& row : frame) {
+            std::fill(row.begin(), row.end(), ' ');
+        }
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\Stats.cpp ===
+#include "game/Stats.h"
+#include <iostream>
+
+namespace cs {
+
+    namespace st {
+
+        Stats::Stats() {}      //constructor
+
+        Stats::Stats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
+            //totalStats(entityData, parts);
+        }
+
+        void Stats::totalStats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
+            for(const auto& row : entityData){
+                for(const auto& cell : row){
+                    m_hp += parts[cell].m_healthPoints;     //adds individual stats
+                    m_attack += parts[cell].m_attack;       //of all parts into the members
+                    m_defense += parts[cell].m_defense;
+                    m_shield += parts[cell].m_shield;
+                }
+            }
+        }
+
+        int Stats::damageDealer(int def) {
+            if(def < m_attack) {
+                return m_attack * ((100.0f) / (100 + def));     //damage formula scales with defense
+            }else{
+                return 5;
+            }
+        }
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\game\StatsPool.cpp ===
+#include "game/StatsPool.h"
+
+namespace cs::st {
+
+    StatsPool::StatsPool() {}
+    StatsPool::StatsPool(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {}
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\src\main.cpp ===
+#include "game/Render.h"
+#include "game/GameData.h"
+#include <iostream>
+
+int main() {
+    cs::Arsenal::Gun g;
+    g.bulletLoading(cs::GameData::bulletLayout());
+    auto parts = cs::GameData::getParts();
+    cs::Player user(cs::GameData::getUserLayout(), true, {0, 24}, g, parts);
+    std::vector<cs::Player> ships = {user};
+    auto randomPool = cs::GameData::xCoordinateMaker(10);
+    std::vector<cs::Enemy> aliveEnemies;
+    std::vector<cs::Enemy> deadEnemies;
+    cs::GameData::enemyMaker(deadEnemies, cs::GameData::enemLay(), randomPool, parts, 0);
+    std::cout << deadEnemies.size() << std::endl;
+    std::cout << aliveEnemies.size() << std::endl;
+    cs::Render::getRenderer().gameLoop(ships, parts, deadEnemies, aliveEnemies);
+    return 0;
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\engine\Utilities.h ===
+/*
+* Utlities.h :
+    - This header provides many functions that are used to
+    manipulate the terminal.
+    - Ex: color change, hide cursor, clear screen etc.,
+    - It uses ANSI codes.
+*/
+
+#pragma once
+
+namespace Utility {
+
+    void reset();       //reset the color of the texts to default
+    void green();       //changes the color of texts to green
+    void red();         //changes the color of texts to red
+
+    void clearScreen();     //clears the terminal
+    void hideCursor();      //hide the cursor
+    void showCursor();      //unhide the cursor
+
+    char keyGiver();        //returns the key that is pressed
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\engine\Vector2C.h ===
+/*
+* Eng is the common namespace
+  for the utilities even helpfull
+  to make other games.
+  */
+
+
+
+/*
+* @Vector2C.h.
+    - A struct instance capable of holding
+      two coordinates namely x and y. 
+    - It also provides many overloaded operators that
+      will help in easy comparions and also in arithematic
+      operations.
+*/
+
+
+
+#pragma once
+
+
+/*
+$ 50 shades of const:
+
+* const datatype* var:
+    - The var pointer is strictly read only.
+    - Values or members cannot be atlered.
+
+* datatype* const var:
+    - The var pointer is read and write.
+    - The pointer var is locked and cannot be reassigned.
+
+* returntype function(datatype& para) const:
+    - This const at the end of the declaration gurrenttes the function will not change the members.
+    - Due to this complier can optimise by keeping the members in the registers.
+    - It reduces continous loading and unloading from RAM to registers.
+*/
+
+
+namespace Eng {
+
+    struct Vector2C {
+        int x;
+        int y;
+
+        //constructors
+        Vector2C();
+        Vector2C(int x, int y);
+
+        bool operator ==(const Vector2C& other) const;      //overloaded '==' operator
+        bool operator <(const Vector2C& other) const;       //overloaded '<' operator
+        bool operator >(const Vector2C& other) const;       //overloaded '>' operator
+        bool operator <=(const Vector2C& other) const;      //overloaded '<=' operator
+        bool operator >=(const Vector2C& other) const;      //overloaded '>=' operator
+        Vector2C operator -(const Vector2C& other) const;       //overloaded '-' operator
+        Vector2C operator +(const Vector2C& other)const;        //overloaded '+' operator
+        void yCoordinateUpdate();       //updates the y coordinate
+
+    };
+    
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Bullet.h ===
+/*
+@file Bullet.h
+
+* Struct Bullet where each instance is a individual bullet.
+* This instance has it's own x, y coordinates.
+* int m_val is a integer that represents the Part class i'd.
+
+*/
+
+#pragma once
+#include "engine/Vector2C.h"
+#include <vector>
+
+namespace cs {
+
+    namespace Arsenal {
+
+        struct Bullet {
+            int m_val;
+            Eng::Vector2C m_bulCoord;
+
+            //constructor
+            Bullet();
+            Bullet(int val); 
+        
+            void coordinateModifier(const Eng::Vector2C& host);     //modifies bullets coordinates
+
+            void bulletMovement();       //increments the bullet position on y axis
+        };
+
+    }
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Character.h ===
+/*
+@file Character.h
+
+* class Character:
+    - Every playble entities have some things in common like i'd,
+      alive or dead, stats(attack, defense etc.,), and x, y coordinates.
+    - Hence this class is a absract class not wrt c++ rules, but based on
+      it's behaviour.
+*/
+
+
+
+#pragma once
+
+#include "StatsPool.h"
+#include "engine/Vector2C.h"
+#include <vector>
+
+namespace cs {
+    
+    class Character {
+    protected:
+        std::vector<std::vector<int>> m_entityData;     //holds the character layout info
+        bool m_isAlive;
+        st::StatsPool m_statsMan;         //stats manager
+    
+    public:
+        Eng::Vector2C m_coord;      //x and y coordinates
+
+        //constructors
+        Character();
+        Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, const std::vector<Part>& parts);
+
+        virtual ~Character() = default;
+
+        const bool getIsAlive() const;      //returns weather character is alive or not
+
+        void deathCondition();        //changes the m_isAlive flag
+
+        const std::vector<std::vector<int>> getEntityData() const;      //returns entity data
+        
+        st::StatsPool& getStatsManager();   //returns a reference to m_statsMan
+
+        void HPReduction(Character* obj);   //reduces character hp
+
+        void fetchStats(const std::vector<Part>& parts);    //fetches the stats from total parts sum
+
+        void makeAlive();       //makes alive
+
+        void makeDead();        //makes dead
+    };
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Collision.h ===
+/*
+@file: Collision.h
+
+* It handles entities iteractions such as collisions etc.,
+* Uses m_activeEvents and m_inactiveEvents to reuse the
+  Event objects.
+
+* Working :
+    - Whenever a event is detected, Event object from
+      m_inactiveEvents is pushed into m_activeEvents.
+    - Then the info about interaction is fed into that
+      object.
+    - All the objects inside the m_activeEvents are then
+      processed individually also altering stats of the
+      interacted enetities.
+    - Later all events are cleared by making them default
+      and pushed into m_inactiveEvents.
+    - This way we use less objects without heap allocation.
+  
+*/
+
+
+
+#pragma once
+
+#include "game/Event.h"
+#include "game/Player.h"
+#include "game/Enemy.h"
+
+namespace cs {
+
+    namespace col {
+
+        class Collision {
+        private:
+            std::vector<Event> m_inactiveEvents;
+            std::vector<Event> m_activeEvents;
+        public:
+
+            Collision() = default;      //default constructor
+
+            /*
+            * It takes an rvalue reference of event vector.
+            * This is moved into the m_inactiveEvents vector.
+            * std::move() ensures that data is not copied but
+              moved to it's destination.
+            */
+
+            /*
+            * How does std::move() work?
+                - It takes in a rvalue reference(a temporary object)
+                  and points it to the destination variable.
+                - Then it sets that move parameter to nullptr.
+                - Effectively stealing the resources.
+            */
+
+
+            Collision(std::vector<Event>&& inactive);       //move constructor
+
+            void addEvent(Enemy* ePtr, Player* uPtr, possibleAgents type);  //adds new event into the m_active events
+
+            void clearEvents();     //clears m_active events and pools it to m_inactiveEvents after processing
+
+            /*
+            * Detects collision between different entities and
+              builds adds the event.
+            */
+            void collisionDetector(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user);
+
+            void processAllEvents();    //processes all the current active events
+
+            /*
+            * Does all these collision detection, adding events and clearing events.
+            * Mighty function that handles entire collision work under the hood.
+            */
+            void collisionHandler(std::vector<Enemy>& aliveEnemies, std::vector<Player>& user);
+
+        };
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Enemy.h ===
+/*
+@file Enemy.h :
+
+* Enemies are inherited from the character class.
+*/
+
+#pragma once
+
+#include "Character.h"
+
+namespace cs {
+
+    class Enemy : public Character {
+    public:
+        using Character::Character;
+
+        void survivalCheck(Character* p);       //reduces hp and also calls functions to check weather entity is alive
+    };
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Event.h ===
+/*
+@file Event.h :
+
+* Event class consist of a inner class defined in private.
+* Event class has a Agent member that is used to store the interaction
+  of a single Event.
+* Many such Event instances are processed by accessing the members of
+  Agent member.
+* Specifically designed to reuse objects to make object pool.
+*/
+
+#pragma once
+
+namespace cs {
+
+    class Enemy;
+    class Player;
+
+    namespace col {
+
+        /*
+        enum class holds all possible events in the game.
+        */
+        enum class possibleAgents {Enemy_vs_Player, Enemy_vs_Bullet, None};
+        
+        class Event {
+        private:
+
+            /*
+            * Agent is nested struct within a class.
+            * Specifically done to keep resources under the outer class
+              scope.
+            * Also these types of design are implemented when the inner struct
+              has no significance or use apart from being member of the outer
+              class.
+            */
+            
+            struct Agent {
+
+                Enemy* m_enemyPtr = nullptr;
+                Player* m_userPtr = nullptr;
+                possibleAgents m_interactionType = possibleAgents::None;
+
+                Agent() = default;      //default constructor
+
+                void agentSetter(Enemy* ePtr, Player* uPtr, possibleAgents type);   //sets the agent wrt to the event
+
+                void agentReset();      //reset to default
+
+            };
+
+            Agent a;
+
+            //inner class defination ends...
+
+        public:
+
+            Event() = default;      //default constructor.
+            
+            const Agent& get_agent() const;     //returns const reference of agent member.
+
+            void setAgent(Enemy* ePtr, Player* uPtr, possibleAgents type);  //calls Agent::agentSetter().
+
+            void eventReset();      //calls Agent::agentReset().
+
+            void processEvent();    //process the event to alter the interacted entities
+            
+        };
+
+    }
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\GameData.h ===
+/*
+
+@File GameData.h :
+
+    - Provides global functions that return
+      entity layouts, bullets layouts etc.,
+    - Wrapped in GameData namespace.
+
+*/
+#pragma once
+
+#include "game/Player.h"
+#include "game/Enemy.h"
+#include "game/Event.h"
+
+namespace cs::GameData {
+
+    std::vector<Part> getParts();     //returns all game parts
+    std::vector<std::vector<int>> getUserLayout();        //returns user appearence map(vector)
+    std::vector<std::vector<int>> getEnemyLayout();       //returns enemy appearence map(vector)
+    std::vector<std::vector<int>> enemLay();        //returns enemy appearence map(vector)
+    std::vector<col::Event> makeEventPool();        //returns default pool of Event instances(vector)
+
+    std::vector<Arsenal::Bullet> bulletLayout();      //returns bullet map(vector)
+    std::vector<int> xCoordinateMaker(int n);       //returns vector of 'n' random numbers
+
+    /*
+    Constructs enemy instances and pushes them into deadEnemies vector.
+    */
+    void enemyMaker(std::vector<Enemy>& deadEnemies, const std::vector<std::vector<int>>& enemyData, const std::vector<int>& randomPool, const std::vector<Part>& parts, int y);
+
+    /*
+    Pushes enemies from dead vector to aliveEnemies vector. Then make them alive.
+    */
+    void enemyBirth(std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies);
+
+    void enemyMove(std::vector<Enemy>& aliveEnemies);       //updates enemies coordinate to make them move.
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Gun.h ===
+/*
+@file Gun.h:
+
+* All entities in the game might use guns, hence a dedicated class for gun.
+* Gun class basically has it's members that store bullets(Bullet.h).
+
+* What's new? :
+    - This completely eliminates the heap allocations every frame.
+    - Used 2 containers that are m_active and m_inactive.
+    - m_ctive stores the bullets that are appearing on the screen and
+      the ones which haven't got hit by obstacles.
+    - m_inactive contains the bullets which aren't on the screen, which
+      got hit by some obstacles.
+    - we transfer these bullets between m_active to m_inactive which allows no
+      heap allocations for Bullet.
+
+* Data Structures(DS) choice :
+    - Used 2 different DS std::vector for m_inactive and std::deque for m_active.
+    - Used std::deque for m_active, because we need pop_front() operation, which
+      is necessary to maintain the order of the bullets.
+    - Used std::vector for m_inactive because, here all bullets are same now hence,
+      no need of maintaining order and pop_back() can be used.
+    - As we know std::vector elements are in a contigous block all elements are side
+      by side, it helps in efficient chaching.
+*/
+
+
+
+#pragma once
+#include <vector>
+#include <deque>
+#include "engine/Vector2C.h"
+#include "game/Bullet.h"
+
+namespace cs {
+
+    namespace Arsenal {
+
+        class Gun {
+          public:
+            std::deque<Bullet> m_active;
+            std::vector<Bullet> m_inactive;
+
+            Gun() {}
+
+            void bulletLoading(std::vector<Bullet>&& bul);      //loads the bullets acts as an init method
+
+            Bullet inactive_pop(const Eng::Vector2C& host);     //pops the bullet from inactive container
+
+            Bullet active_pop();        //pops the bullet from active container and rerturns it
+
+            void inactive_push();       //pushes the bullet into the inactive container
+
+            void active_push(const Eng::Vector2C& host);        //pushes the bullets into active container
+
+            void bulletAdder(const Eng::Vector2C& host);        //performs rotation
+
+            void bulletMove();    //increments the bullets position making it move
+
+        };
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Part.h ===
+/*
+
+@file Part.h:
+
+* A struct instance that represents
+  parts/compoments/atoms.
+* Using this we can build Player,
+  Enemies etc.,
+* Each Part has it's own attack,
+  defense, hp etc.,
+
+* Idea for utilising this struct :
+    * Storing the struct variables in a vector.
+    * This vector is a never changing fixed block(array).
+    * Increasing it's size only if new parts are to be added.
+    * Each entity will have a enitityData which is a 2d vector.
+    * The elements in entityData represents the indices of the
+      part vector.
+    * EX: entityData = {{2, 3, 1}} && PartVector = {Part1, Part2, Part3, ...., Partn}.
+      Here entityData tells [Part2 Part3 Part1] is the how that entity will look.
+      
+*/
+
+#pragma once
+
+namespace cs {
+    
+    struct Part {
+      char m_symbol;
+      int m_healthPoints;
+      int m_attack;
+      int m_defense;
+      int m_shield;
+
+      //constructors:
+      Part();
+      Part(char s, int hp, int atk, int def, int sh);
+
+    };
+  
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Player.h ===
+/*
+
+@File Player.h :
+
+    - Manages player.
+    
+*/
+
+#pragma once
+
+#include "game/Character.h"
+#include "game/Gun.h"
+
+namespace cs {
+
+    class Player : public Character {
+    public:
+        Arsenal::Gun m_playerGun;
+        
+        //constructor
+        Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun g, const std::vector<Part>& parts);
+
+        void userMovement(char key);        //makes user move or interact based on the keyboard inputs
+
+        void gunFire();     //Lets user fire bullets
+
+        void survivalCheck(Character* obj);     //Triggers hp reduction and also checks weather alive.
+    };
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Render.h ===
+/* 
+ * @file Render.h
+ * class Render:
+ *  - Render is a singleton class.
+ *  - Acts as the central graphics controller for drawing the game state to the console.
+ *  - Uses a 2D char array (`frame`) as a back-buffer that is reset and redrawn every frame.
+ *  - Features advanced coordinate mapping:
+ *    - Vector overload: Draws large, multi-part entities (like players) using raw row-by-row data.
+ *    - Deque overload: Optimized for small, single-character entities (like bullets) centered in the scale block.
+ */
+
+
+#pragma once
+
+#include "game/Player.h"
+#include "game/Enemy.h"
+#include <array>
+
+//Axes multipliers : 
+const static int csg_xScale = 5;
+const static int csg_yScale = 1;
+
+namespace cs {
+
+    /*
+        SINGLETON :
+    */
+
+    class Render {
+    private:    
+        Render();
+        /*
+        * Constructor in private access specifier
+          ensures that it can be only accessed by
+          class.
+        */
+
+    public:
+        std::array<std::array<char, 25>, 25> frame;
+        
+        static Render& getRenderer();
+
+        /*
+        * The getRenderer() function returns instance of
+          the Render class.
+        * As it returns a static instance meaning that it
+          creates only 1 instance.
+        * It is a global instance.
+        * This way only getRenderer() can provide you a 
+          render instance.
+        * As the constructor is in private so only accessible
+          inside the class. Hence, no one can create the instance
+          outside this class.
+        */
+
+        //inserts the entities into the m_frame.
+        template <typename Entity>
+        void insertEntity(const std::vector<Entity>& e, const std::vector<Part>& parts);
+        template <typename Entity>
+        void insertEntity(const std::deque<Entity>& e, const std::vector<Part>& parts);
+
+        void frameReset();      //reset the grid to blank spaces
+        void drawFrame();       //draws the frame on the terminal
+        void gameLoop(std::vector<Player>& ships, const std::vector<Part>& parts, std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies);        //main loop that runs the game
+    };
+
+    template <typename Entity>
+    void Render::insertEntity(const std::vector<Entity>& entities, const std::vector<Part>& parts) {
+        for(const auto& e : entities) {
+            if(e.getIsAlive()) {
+                int filler = e.m_coord.x * csg_xScale;   //tells where to start
+                for(const auto& row : e.getEntityData()) {
+                    for(int i = 0; i < row.size(); i++) {
+                        frame[e.m_coord.y][filler + i] = parts[row[i]].m_symbol;
+                    }
+                }
+            }
+        }
+    }
+
+    template <typename Entity>
+    void Render::insertEntity(const std::deque<Entity>& entities, const std::vector<Part>& parts) {
+        for(const auto& b : entities) {
+            frame[b.m_bulCoord.y][(b.m_bulCoord.x * csg_xScale) + 2] = parts[b.m_val].m_symbol;
+        }
+    }
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Stats.h ===
+#pragma once
+
+#include "game/Part.h"
+#include <vector>
+
+namespace cs {
+
+    namespace st {
+
+        struct Stats {
+            int m_hp = 0;
+            int m_attack = 0;
+            int m_defense = 0;
+            int m_shield = 0;
+
+            Stats();    //constructor
+            Stats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
+
+            //gives the total stats by adding atk, def, hp from individual parts
+            void totalStats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
+
+            int damageDealer(int def);      //calculates the total damage dealt
+
+        };
+
+    }
+
+}
+
+=== FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\StatsPool.h ===
+#pragma once
+
+#include "game/Stats.h"
+
+namespace cs {
+
+
+    namespace st {
+
+        struct StatsPool {
+            Stats m_base;
+            Stats m_current;
+
+            StatsPool();    //constructor
+            StatsPool(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
+        };
+
+    }
+    
+}
+

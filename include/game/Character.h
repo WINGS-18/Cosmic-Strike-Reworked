@@ -45,8 +45,8 @@ namespace cs {
 
         void fetchStats(const std::vector<Part>& parts);    //fetches the stats from total parts sum
 
-        void makeAlive();       //makes alive
+        void makeAlive();       //makes entities alive
 
-        void makeDead();        //makes dead
+        void makeDead();        //makes entities dead
     };
 }
