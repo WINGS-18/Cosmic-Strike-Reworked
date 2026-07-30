@@ -93,15 +93,14 @@ namespace cs::GameData {
     void enemyMaker(std::vector<Enemy>& deadEnemies, const std::vector<std::vector<int>>& enemyData, const std::vector<int>& randomPool, const std::vector<Part>& parts, int y) {
         st::StatsPool stats(enemyData, parts);
         for(const auto randNum : randomPool){
-            Enemy e(enemyData, false, {randNum, y});
+            Enemy e(enemyData, false, {randNum, y}, parts);
             deadEnemies.push_back(e);
         }
     }
 
     void enemyBirth(std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies) {
-        auto obj = deadEnemies.back();
-        obj.makeAlive();
-        aliveEnemies.push_back(obj);
+        aliveEnemies.push_back(deadEnemies.back());
+        aliveEnemies.back().makeAlive();
         deadEnemies.pop_back();
     }
 

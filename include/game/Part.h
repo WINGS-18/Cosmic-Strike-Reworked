@@ -25,17 +25,17 @@
 
 namespace cs {
     
-  struct Part {
-    char m_symbol;
-    int m_healthPoints;
-    int m_attack;
-    int m_defense;
-    int m_shield;
+    struct Part {
+      char m_symbol;
+      int m_healthPoints;
+      int m_attack;
+      int m_defense;
+      int m_shield;
 
-    //constructors:
-    Part();
-    Part(char s, int hp, int atk, int def, int sh);
+      //constructors:
+      Part();
+      Part(char s, int hp, int atk, int def, int sh);
 
-  };
+    };
   
 }

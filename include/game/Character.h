@@ -29,22 +29,24 @@ namespace cs {
 
         //constructors
         Character();
-        Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny);
+        Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, const std::vector<Part>& parts);
 
         virtual ~Character() = default;
 
         const bool getIsAlive() const;      //returns weather character is alive or not
 
-        const void deathCondition();        //changes the m_isAlive flag
+        void deathCondition();        //changes the m_isAlive flag
 
         const std::vector<std::vector<int>> getEntityData() const;      //returns entity data
         
-        st::StatsPool& getStatsManager();
+        st::StatsPool& getStatsManager();   //returns a reference to m_statsMan
 
-        void HPReduction(Character* obj);
+        void HPReduction(Character* obj);   //reduces character hp
 
-        void makeAlive();
+        void fetchStats(const std::vector<Part>& parts);    //fetches the stats from total parts sum
 
-        void makeDead();
+        void makeAlive();       //makes alive
+
+        void makeDead();        //makes dead
     };
 }

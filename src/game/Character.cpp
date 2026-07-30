@@ -6,14 +6,14 @@ namespace cs {
 
     Character::Character() {}
 
-    Character::Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny)
-        : m_entityData(ed), m_isAlive(isAl), m_coord(xny) {}
+    Character::Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, const std::vector<Part>& parts)
+        : m_entityData(ed), m_isAlive(isAl), m_coord(xny) {fetchStats(parts);}
 
     const bool Character::getIsAlive() const {      //returns weather the character is alive or not
         return m_isAlive;
     }
 
-    const void Character::deathCondition() {
+    void Character::deathCondition() {
         if(m_statsMan.m_current.m_hp <= 0)  makeDead();
     }
 
@@ -34,6 +34,11 @@ namespace cs {
             m_statsMan.m_current.m_hp -= m_statsMan.m_current.damageDealer(m_statsMan.m_current.m_defense) + m_statsMan.m_current.m_shield;
             m_statsMan.m_current.m_shield = 0;
         }
+    }
+
+    void Character::fetchStats(const std::vector<Part>& parts) {
+        m_statsMan.m_base.totalStats(m_entityData, parts);
+        m_statsMan.m_current.totalStats(m_entityData, parts);
     }
 
     void Character::makeAlive() {

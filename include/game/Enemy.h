@@ -14,6 +14,6 @@ namespace cs {
     public:
         using Character::Character;
 
-        void survivalCheck(Character* p);
+        void survivalCheck(Character* p);       //reduces hp and also calls functions to check weather entity is alive
     };
 }

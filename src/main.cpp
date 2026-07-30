@@ -6,7 +6,7 @@ int main() {
     cs::Arsenal::Gun g;
     g.bulletLoading(cs::GameData::bulletLayout());
     auto parts = cs::GameData::getParts();
-    cs::Player user(cs::GameData::getUserLayout(), true, {0, 24}, g);
+    cs::Player user(cs::GameData::getUserLayout(), true, {0, 24}, g, parts);
     std::vector<cs::Player> ships = {user};
     auto randomPool = cs::GameData::xCoordinateMaker(10);
     std::vector<cs::Enemy> aliveEnemies;
