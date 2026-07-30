@@ -1,9 +1,15 @@
+/*
+@file StatsPool.h :
+
+* Uses two Stats instances(base, current) as'
+  members to control the stats.
+*/
+
 #pragma once
 
 #include "game/Stats.h"
 
 namespace cs {
-
 
     namespace st {
 

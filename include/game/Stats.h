@@ -1,3 +1,9 @@
+/*
+@file Stats.h :
+
+* Handles stats of the entities.
+*/
+
 #pragma once
 
 #include "game/Part.h"
