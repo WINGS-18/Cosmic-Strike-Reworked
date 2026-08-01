@@ -805,9 +805,9 @@ namespace cs {
 
         void fetchStats(const std::vector<Part>& parts);    //fetches the stats from total parts sum
 
-        void makeAlive();       //makes alive
+        void makeAlive();       //makes entities alive
 
-        void makeDead();        //makes dead
+        void makeDead();        //makes entities dead
     };
 }
 
@@ -1257,6 +1257,12 @@ namespace cs {
 }
 
 === FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\Stats.h ===
+/*
+@file Stats.h :
+
+* Handles stats of the entities.
+*/
+
 #pragma once
 
 #include "game/Part.h"
@@ -1287,12 +1293,18 @@ namespace cs {
 }
 
 === FILE: C:\Users\manoj\Cosmic-Strike-Reworked\include\game\StatsPool.h ===
+/*
+@file StatsPool.h :
+
+* Uses two Stats instances(base, current) as'
+  members to control the stats.
+*/
+
 #pragma once
 
 #include "game/Stats.h"
 
 namespace cs {
-
 
     namespace st {
 

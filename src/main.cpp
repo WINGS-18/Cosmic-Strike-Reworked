@@ -1,5 +1,5 @@
-#include "game/Render.h"
-#include "game/GameData.h"
+#include "game/systems/Render.h"
+#include "game/assets/GameData.h"
 #include <iostream>
 
 int main() {
