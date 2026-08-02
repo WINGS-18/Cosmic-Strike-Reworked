@@ -4,7 +4,7 @@
 namespace cs {
 
     //constructor
-    Player::Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun g, const std::vector<Part>& parts) : Character(ed, isAl, xny, parts) {
+    Player::Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun& g, const std::vector<Part>& parts) : Character(ed, isAl, xny, parts) {
         this->m_playerGun = g;
         std::cout << "Player created\n";
     }

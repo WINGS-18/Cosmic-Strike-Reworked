@@ -7,7 +7,7 @@ namespace cs {
     Character::Character() {}
 
     Character::Character(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, const std::vector<Part>& parts)
-        : m_entityData(ed), m_isAlive(isAl), m_coord(xny) {fetchStats(parts);}
+        : m_entityData(std::move(ed)), m_isAlive(isAl), m_coord(xny) {fetchStats(parts);}
 
     const bool Character::getIsAlive() const {      //returns weather the character is alive or not
         return m_isAlive;
@@ -17,7 +17,7 @@ namespace cs {
         if(m_statsMan.m_current.m_hp <= 0)  makeDead();
     }
 
-    const std::vector<std::vector<int>> Character::getEntityData() const{
+    const std::vector<std::vector<int>>& Character::getEntityData() const{
         return m_entityData;
     }
 

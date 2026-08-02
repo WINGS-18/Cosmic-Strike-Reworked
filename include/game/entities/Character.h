@@ -37,7 +37,7 @@ namespace cs {
 
         void deathCondition();        //changes the m_isAlive flag
 
-        const std::vector<std::vector<int>> getEntityData() const;      //returns entity data
+        const std::vector<std::vector<int>>& getEntityData() const;      //returns entity data
         
         st::StatsPool& getStatsManager();   //returns a reference to m_statsMan
 
