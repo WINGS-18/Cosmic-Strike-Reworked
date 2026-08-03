@@ -5,10 +5,10 @@ namespace cs {
 
     namespace st {
 
-        Stats::Stats() {}      //constructor
+        //fix : parameterised constructor works successfully
 
         Stats::Stats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
-            //totalStats(entityData, parts);
+            totalStats(entityData, parts);
         }
 
         void Stats::totalStats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
