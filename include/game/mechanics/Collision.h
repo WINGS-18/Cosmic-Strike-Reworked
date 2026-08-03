@@ -50,7 +50,7 @@ namespace cs {
             * How does std::move() work?
                 - It takes in a rvalue reference(a temporary object)
                   and points it to the destination variable.
-                - Then it sets that move parameter to nullptr.
+                - Then it sets that move parameter to default.
                 - Effectively stealing the resources.
             */
 
