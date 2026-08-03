@@ -1,6 +1,4 @@
-#pragma once
-
-#include "include/gameui/Menu.h"
+#include "gameui/Menu.h"
 #include <iostream>
 
 
