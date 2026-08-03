@@ -17,7 +17,7 @@ namespace cs {
             Stats m_base;
             Stats m_current;
 
-            StatsPool();    //constructor
+            StatsPool() = default;   //constructor
             StatsPool(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
         };
 
