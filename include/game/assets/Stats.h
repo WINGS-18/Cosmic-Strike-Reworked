@@ -19,7 +19,7 @@ namespace cs {
             int m_defense = 0;
             int m_shield = 0;
 
-            Stats();    //constructor
+            Stats() = default;    //constructor
             Stats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
 
             //gives the total stats by adding atk, def, hp from individual parts
