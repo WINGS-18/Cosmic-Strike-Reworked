@@ -7,6 +7,8 @@
 
 namespace menu {
 
+    enum class navigation {};
+
     class Node {
     private:
         std::string m_menuName;
@@ -20,5 +22,7 @@ namespace menu {
 
         virtual void display();
     };
+
+
 
 }
