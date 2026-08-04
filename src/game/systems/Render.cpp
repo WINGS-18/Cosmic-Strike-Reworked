@@ -31,7 +31,6 @@ namespace cs {
             key = Utility::keyGiver();
             if(key == 'e')  break;
             ships[0].userMovement(key);
-            std::cout << ships[0].getIsAlive() << std::endl;
             collisionCheck.collisionHandler(aliveEnemies, ships);
             insertEntity(ships, parts);
             insertEntity(ships[0].m_playerGun.m_active, parts);
