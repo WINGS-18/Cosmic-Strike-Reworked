@@ -18,6 +18,7 @@ namespace cs {
         struct Bullet {
             int m_val;
             Eng::Vector2C m_bulCoord;
+            bool m_bul_isAlive = false;
 
             //constructor
             Bullet();
