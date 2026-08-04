@@ -11,9 +11,12 @@
 namespace cs {
 
     class Enemy : public Character {
+    private:
+        int m_speed = 2;
     public:
         using Character::Character;
 
         void survivalCheck(Character* p);       //reduces hp and also calls functions to check weather entity is alive
+        int getSpeed() const noexcept;
     };
 }
