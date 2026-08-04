@@ -15,3 +15,7 @@ void cs::Enemy::survivalCheck(Character* obj) {
     HPReduction(obj);
     deathCondition();
 }
+
+int cs::Enemy::getSpeed() const noexcept {
+    return m_speed;
+}
