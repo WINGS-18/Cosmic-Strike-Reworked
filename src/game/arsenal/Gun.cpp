@@ -13,6 +13,7 @@ namespace cs::Arsenal {
             Bullet b = m_inactive.back();
             m_inactive.pop_back();
             b.coordinateModifier(host);
+            b.m_bul_isAlive = true;
             return b;
         }
         return {0};
@@ -21,6 +22,7 @@ namespace cs::Arsenal {
     Bullet Gun::active_pop() {
         if(!m_active.empty()) {
             Bullet b = m_active.front();
+            b.m_bul_isAlive = false;
             m_active.pop_front();
             return b;
         }
@@ -56,5 +58,10 @@ namespace cs::Arsenal {
                 if(b.m_bulCoord.y > 0)   b.bulletMovement();
             }
         }
+    }
+
+    void Gun::hitBullet(int yCoordinate, int speed) {
+        for(size_t i = 0; i <= speed; i++)
+        m_active[yCoordinate + i].m_bul_isAlive = false;
     }
 }
