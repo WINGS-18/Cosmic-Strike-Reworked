@@ -81,7 +81,9 @@ namespace cs {
     template <typename Entity>
     void Render::insertEntity(const std::deque<Entity>& entities, const std::vector<Part>& parts) {
         for(const auto& b : entities) {
-            frame[b.m_bulCoord.y][(b.m_bulCoord.x * csg_xScale) + 2] = parts[b.m_val].m_symbol;
+            if(b.m_bul_isAlive) {
+                frame[b.m_bulCoord.y][(b.m_bulCoord.x * csg_xScale) + 2] = parts[b.m_val].m_symbol;
+            }
         }
     }
 }
