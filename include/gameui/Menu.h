@@ -10,7 +10,7 @@ namespace menu {
     enum class navigation {};
 
     class Node {
-    private:
+    protected:
         std::string m_menuName;
         std::vector<Node*> m_children;
 
@@ -21,8 +21,12 @@ namespace menu {
         virtual ~Node() = default;      //destructor
 
         virtual void display();
+
+        std::vector<Node*>& getChildren();
     };
 
+    void addNode(Node* parent, Node* child);
 
+    class Warehouse : public 
 
 }
