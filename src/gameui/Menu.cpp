@@ -10,8 +10,16 @@ namespace menu {
     void Node::display() {
         for(int i = 0; const auto& child : m_children) {
             std::cout << static_cast<char>('a' + i) << ")" << child->m_menuName << std::endl;
-            i++;
+            ++i;
         }
+    }
+
+    std::vector<Node*>& Node::getChildren() {
+        return m_children;
+    }
+
+    void addNode(Node* parent, Node* child) {
+        parent->getChildren().push_back(child);
     }
 
 }
