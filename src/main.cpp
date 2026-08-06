@@ -2,7 +2,7 @@
 #include "game/assets/GameData.h"
 #include "gameui/Menu.h"
 #include <iostream>
-#include <memory>
+
 
 int main() {
     // cs::Arsenal::Gun g;
@@ -20,8 +20,14 @@ int main() {
     auto root = std::make_unique<menu::Node> ("Menu");
     auto play = std::make_unique<menu::Node> ("Play");
     auto workshop = std::make_unique<menu::Node> ("Workshop");
-    menu::addNode(root.get(), play.get());
-    menu::addNode(root.get(), workshop.get());
-    root->display();
+    auto core = std::make_unique<menu::Warehouse> ("Core", cs::GameData::getParts(), Eng::Slot{2}, std::vector<Eng::Slot>{Eng::Slot{3}, Eng::Slot{7}, Eng::Slot{10}, Eng::Slot{12}});
+    auto body = std::make_unique<menu::Warehouse> ("Body", cs::GameData::getParts(), Eng::Slot{1, 3}, std::vector<Eng::Slot>{Eng::Slot{2, 4}, Eng::Slot{6, 8}, Eng::Slot{9, 11}});
+    auto wing = std::make_unique<menu::Warehouse> ("Wing", cs::GameData::getParts(), Eng::Slot{0, 4}, std::vector<Eng::Slot>{Eng::Slot{1, 5}, Eng::Slot{12, 12}});
+
+    root->addChild(std::move(play));
+    root->addChild(std::move(workshop));
+    workshop->addChild(std::move(core));
+    workshop->addChild(std::move(body));
+    workshop->addChild(std::move(wing));
     return 0;
 }
