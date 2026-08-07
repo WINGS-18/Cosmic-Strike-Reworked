@@ -9,7 +9,12 @@
 
 namespace menu {
 
-    enum class navigation {};
+    enum class navigation {
+        ENTER = 0x0D,
+        PAGE_UP = 0x21,
+        PAGE_DOWN = 0x22
+    };
+
 
     class Node {
     protected:
