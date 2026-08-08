@@ -1,4 +1,5 @@
 #include "game/arsenal/Gun.h"
+#include <iostream>
 
 
 namespace cs::Arsenal {
@@ -60,8 +61,38 @@ namespace cs::Arsenal {
         }
     }
 
+    /*
+    * This loop ensures that bullets won't tunnel and also
+      not avoids single tunneling when enemy switched it's
+      position.
+    */
+
+    /*
+    problem and fix ?
+
+    Problem :
+        * Whevener enemy got closer to user the yCoordinate
+        + i sum would go to 24 which is not a valid index
+        for m_active deque.
+
+        * Hence getting out of bound access error.
+
+    Fix :
+        * Now added extra check to see if sum of
+        ycoordinate and i reaches size of m_active.
+        * If it reaches it we decrease it by one so
+        stays in valid index range.
+        * We won't get problem because enemy is closer
+        to user hence the bullets are not much visible
+        to the user.
+    */
+
     void Gun::hitBullet(int yCoordinate, int speed) {
-        for(size_t i = 0; i <= speed; i++)
-        m_active[yCoordinate + i].m_bul_isAlive = false;
+        int idx;
+        for(size_t i = 0; i <= speed; i++) {
+            idx = yCoordinate + i;
+            if(idx == m_active.size())   --idx;
+            m_active[idx].m_bul_isAlive = false;
+        }
     }
 }
