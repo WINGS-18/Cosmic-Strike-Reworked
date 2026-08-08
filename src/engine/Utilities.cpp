@@ -32,3 +32,7 @@ char Utility::keyGiver() {
     else
         return '\0';
 }
+
+char Utility::pressKey() {
+    return _getch();
+}
