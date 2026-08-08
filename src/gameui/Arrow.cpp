@@ -42,14 +42,15 @@ namespace menu {
             
             case Buttons::PAGE_UP :
             if(m_arrIndex != start) {
-                std::swap(m_navigArrow[m_arrIndex], m_navigArrow[--m_arrIndex]);
+                m_navigArrow[m_arrIndex--] = ' ';
+                m_navigArrow[m_arrIndex] = '>';
             }
             break;
             
             case Buttons::PAGE_DOWN :
             if(m_arrIndex != end) {
-                std::swap(m_navigArrow[m_arrIndex], m_navigArrow[m_arrIndex + 1]);
-                std::cout << "move : " << m_navigArrow[m_arrIndex] << "\n";
+                m_navigArrow[m_arrIndex++] = ' ';
+                m_navigArrow[m_arrIndex] = '>';
             }
             break;
 
