@@ -1,20 +1,16 @@
 #include "gameui/MenuRender.h"
-#include <iostream>
 
 namespace menu {
 
-    MenuRender::MenuRender() {
-        //std::cout << "created";
-    }
+    MenuRender::MenuRender() {}
 
     void MenuRender::menuLoop(std::unique_ptr<Node> root, Arrow& arrow) {
-        //std::cout << "Entered";
         while(true) {
             root->display(arrow);
             char control = Utility::pressKey();
             if(control == 'e')  break;
             arrow.setButtonPressed(control);
-            arrow.moveArrow(0, root->getChildren().size());
+            arrow.moveArrow(0, root->getChildren().size() - 1);
             Utility::clearScreen();
         }
     }
