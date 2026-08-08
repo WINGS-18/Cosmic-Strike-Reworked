@@ -7,9 +7,9 @@ namespace menu {
     Node::Node(std::string name)
         : m_menuName(std::move(name)) {}
 
-    void Node::display() {
+    void Node::display(Arrow& arrow) {
         for(int i = 0; const auto& child : m_children) {
-            std::cout << static_cast<char> ('a' + i) << ")" << child->m_menuName << std::endl;
+            std::cout << arrow.printNavigArrow(i) << " " << child->m_menuName << std::endl;
             ++i;
         }
     }
@@ -29,7 +29,7 @@ namespace menu {
     Warehouse::Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts)
         : Node(std::move(name)), m_parts(std::move(parts)), m_placement(std::move(place)), m_allParts(std::move(allParts)) {}
 
-    void Warehouse::display() {
+    void Warehouse::display(Arrow& arrow) {
         for(int i = 0; const auto& part : m_allParts) {
             std::cout << static_cast<char> ('a' + i) << ")";
             if(part.single()) {
