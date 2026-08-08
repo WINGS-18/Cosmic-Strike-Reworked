@@ -6,15 +6,9 @@
 #include <memory>
 #include "game/assets/GameData.h"
 #include "engine/Slot.h"
+#include "gameui/Arrow.h"
 
 namespace menu {
-
-    enum class navigation {
-        ENTER = 0x0D,
-        PAGE_UP = 0x21,
-        PAGE_DOWN = 0x22
-    };
-
 
     class Node {
     protected:
@@ -27,7 +21,7 @@ namespace menu {
 
         virtual ~Node() = default;      //destructor
 
-        virtual void display();
+        virtual void display(Arrow& arrow);
 
         std::vector<Node*> getChildren();
 
@@ -43,7 +37,7 @@ namespace menu {
     public:
         Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts);
 
-        void display() override;
+        void display(Arrow& arrow) override;
     };
 
 }
