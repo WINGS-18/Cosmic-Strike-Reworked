@@ -57,6 +57,8 @@ namespace cs {
 
             void bulletMove();    //increments the bullets position making it move
 
+            void hitBullet(int yCoordinate, int speed);
+
         };
     }
 }

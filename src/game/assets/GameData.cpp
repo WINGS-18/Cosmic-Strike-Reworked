@@ -107,7 +107,7 @@ namespace cs::GameData {
     void enemyMove(std::vector<Enemy>& aliveEnemies) {
         for(auto& enemy : aliveEnemies) {
             if(enemy.m_coord.y < 24)
-                enemy.m_coord.yCoordinateUpdate();
+                enemy.m_coord.yCoordinateUpdate(enemy.getSpeed());
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Eng {
         bool operator >=(const Vector2C& other) const;      //overloaded '>=' operator
         Vector2C operator -(const Vector2C& other) const;       //overloaded '-' operator
         Vector2C operator +(const Vector2C& other)const;        //overloaded '+' operator
-        void yCoordinateUpdate();       //updates the y coordinate
+        void yCoordinateUpdate(int speed);       //updates the y coordinate
 
     };
     
