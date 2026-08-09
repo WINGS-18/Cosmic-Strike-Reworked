@@ -25,6 +25,6 @@ namespace menu {
         char printNavigArrow(int index) const;
 
         void setButtonPressed(char key);
-        void moveArrow(int start, int end);
+        int moveArrow(int start, int end);
     };
 }
