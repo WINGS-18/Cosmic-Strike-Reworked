@@ -34,29 +34,33 @@ namespace menu {
         }
     }
 
-    void Arrow::moveArrow(int start, int end) {
+    int Arrow::moveArrow(int start, int end) {
+        int oldIndex = 0;
         switch (m_pressed) {
             case Buttons::ENTER :
-            m_arrIndex = 0;
-            break;
+                oldIndex = m_arrIndex;
+                m_arrIndex = 0;
+                return oldIndex;
+                break;
             
             case Buttons::PAGE_UP :
-            if(m_arrIndex != start) {
-                m_navigArrow[m_arrIndex--] = ' ';
-                m_navigArrow[m_arrIndex] = '>';
-            }
-            break;
+                if(m_arrIndex != start) {
+                    m_navigArrow[m_arrIndex--] = ' ';
+                    m_navigArrow[m_arrIndex] = '>';
+                }
+                break;
             
             case Buttons::PAGE_DOWN :
-            if(m_arrIndex != end) {
-                m_navigArrow[m_arrIndex++] = ' ';
-                m_navigArrow[m_arrIndex] = '>';
-            }
-            break;
+                if(m_arrIndex != end) {
+                    m_navigArrow[m_arrIndex++] = ' ';
+                    m_navigArrow[m_arrIndex] = '>';
+                }
+                break;
 
         default:
             break;
         }
+        return -1;
     } 
 
 }
