@@ -14,6 +14,8 @@ namespace menu {
         return m_navigArrow[index];
     }
 
+    void Arrow::set_arrIndex(int idx) {m_arrIndex = idx;}
+
     void Arrow::setButtonPressed(char key) {
         std::cout << key;
         switch (key) {
@@ -39,21 +41,24 @@ namespace menu {
         switch (m_pressed) {
             case Buttons::ENTER :
                 oldIndex = m_arrIndex;
+                std::cout << "ArrIndex : " << m_arrIndex << "\n";
                 m_arrIndex = 0;
                 return oldIndex;
                 break;
-            
-            case Buttons::PAGE_UP :
+                
+                case Buttons::PAGE_UP :
                 if(m_arrIndex != start) {
                     m_navigArrow[m_arrIndex--] = ' ';
                     m_navigArrow[m_arrIndex] = '>';
+                    std::cout << "ArrIndex : " << m_arrIndex << "\n";
                 }
                 break;
-            
-            case Buttons::PAGE_DOWN :
+                
+                case Buttons::PAGE_DOWN :
                 if(m_arrIndex != end) {
                     m_navigArrow[m_arrIndex++] = ' ';
                     m_navigArrow[m_arrIndex] = '>';
+                    std::cout << "ArrIndex : " << m_arrIndex << "\n";
                 }
                 break;
 
@@ -62,5 +67,10 @@ namespace menu {
         }
         return -1;
     } 
+
+    void Arrow::setArrow() {
+        m_navigArrow[m_arrIndex] = '>';
+        m_arrIndex = 0;
+    }
 
 }

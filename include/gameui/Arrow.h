@@ -23,8 +23,9 @@ namespace menu {
 
         const std::vector<char>& getArrow() const;
         char printNavigArrow(int index) const;
-
+        void set_arrIndex(int idx);
         void setButtonPressed(char key);
         int moveArrow(int start, int end);
+        void setArrow();
     };
 }

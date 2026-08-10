@@ -26,12 +26,20 @@ namespace menu {
         m_children.push_back(std::move(child));
     }
 
+    int Node::getOptionLen() {
+        return m_children.size() - 1;
+    }
+
     Warehouse::Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts)
         : Node(std::move(name)), m_parts(std::move(parts)), m_placement(std::move(place)), m_allParts(std::move(allParts)) {}
 
+    int Warehouse::sizeOfAllParts() const {
+        return m_allParts.size();
+    }
+
     void Warehouse::display(Arrow& arrow) {
         for(int i = 0; const auto& part : m_allParts) {
-            std::cout << static_cast<char> ('a' + i) << ")";
+            std::cout << arrow.printNavigArrow(i) << " ";
             if(part.single()) {
                 std::cout << m_parts[part[0]].m_symbol;
             }else {
@@ -40,5 +48,9 @@ namespace menu {
             std::cout << "\n";
             i++;
         }
+    }
+
+    int Warehouse::getOptionLen() {
+        return sizeOfAllParts() - 1;
     }
 }

@@ -26,6 +26,8 @@ namespace menu {
         std::vector<Node*> getChildren();
 
         void addChild(std::unique_ptr<Node> child);
+
+        virtual int getOptionLen();
     };
 
 
@@ -37,7 +39,11 @@ namespace menu {
     public:
         Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts);
 
+        int sizeOfAllParts() const;
+
         void display(Arrow& arrow) override;
+
+        int getOptionLen() override;
     };
 
 }

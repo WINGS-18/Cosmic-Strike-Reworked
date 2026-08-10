@@ -1,8 +1,23 @@
 #include "gameui/MenuRender.h"
+#include <iostream>
 
 namespace menu {
 
     MenuRender::MenuRender() {}
+
+    void MenuRender::setCurrentState(Arrow& arrow) {
+        int frame = arrow.moveArrow(0, m_navigStack.top()->getOptionLen());
+        if(frame != -1) {
+            m_navigStack.push(m_navigStack.top()->getChildren()[frame]);
+        }
+    }
+
+    void MenuRender::removeCurrentState(Arrow& arrow) {
+        if(!m_navigStack.empty()) {
+            m_navigStack.pop();
+            arrow.setArrow();
+        }
+    }
 
     void MenuRender::menuLoop(std::unique_ptr<Node> root, Arrow& arrow) {
         m_navigStack.push(root.get());
@@ -12,12 +27,10 @@ namespace menu {
                 top->display(arrow);
             }
             char control = Utility::pressKey();
-            if(control == 'e')  break;
             arrow.setButtonPressed(control);
-            int frame = arrow.moveArrow(0, m_navigStack.top()->getChildren().size() - 1);
-            if(frame != -1) {
-                m_navigStack.push(root->getChildren()[frame]);
-            }
+            if(control == 'e')  removeCurrentState(arrow);
+            setCurrentState(arrow);
+            std::cout << "Size: " << m_navigStack.size();
             Utility::clearScreen();
         }
     }

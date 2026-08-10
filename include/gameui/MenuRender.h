@@ -12,8 +12,12 @@ namespace menu {
         std::stack<Node*> m_navigStack;
     public:
         MenuRender();
-
+        
+        void setCurrentState(Arrow& arrow);
+        void removeCurrentState(Arrow& arrow);
+        
         void menuLoop(std::unique_ptr<Node> root, Arrow& arrow);
+        
     };
 
 }
