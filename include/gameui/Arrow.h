@@ -1,3 +1,40 @@
+/*
+file @ Arrow.h :
+
+* This Arrow class provides instance that
+  stores arrow inside a vector.
+* It is rendered as each element of m_navigArrow
+  in new line.
+* The index of arrow in that vector is actually
+  the option which it is pointing.
+* If 
+
+
+---> How it looks :
+
+> Core
+  Body
+  Wings
+
+* So here currently the arrow is at Core which means
+  m_navigArrow looks like {'>', ' ', ' ',.....}.
+* When user clicks down key : m_pressed Buttons instance
+  is set to PAGE_DOWN.
+* Now a special functin increments the m_arrIndex(it keeps
+  track of arrow inside the m_navigArrow) and swaps old 
+  m_arrIndex element with new m_arrIndex.
+* Hence it'll look like this...
+
+  Core
+> Body
+  Wings
+
+* Pressing enter resets m_arrIndex to 0 and the arrow to
+  index m_arrIndex. Also returns old m_arrIndex.
+* Using that return value we can perfectly put child node
+  of that vector index of tree on the stack.
+*/
+
 #pragma once
 
 #include <vector>
