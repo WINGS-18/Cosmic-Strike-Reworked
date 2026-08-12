@@ -41,24 +41,20 @@ namespace menu {
         switch (m_pressed) {
             case Buttons::ENTER :
                 oldIndex = m_arrIndex;
-                std::cout << "ArrIndex : " << m_arrIndex << "\n";
                 m_arrIndex = 0;
+                swapArrow(oldIndex);
                 return oldIndex;
                 break;
                 
                 case Buttons::PAGE_UP :
                 if(m_arrIndex != start) {
-                    m_navigArrow[m_arrIndex--] = ' ';
-                    m_navigArrow[m_arrIndex] = '>';
-                    std::cout << "ArrIndex : " << m_arrIndex << "\n";
+                    swapArrow(m_arrIndex--);
                 }
                 break;
                 
                 case Buttons::PAGE_DOWN :
                 if(m_arrIndex != end) {
-                    m_navigArrow[m_arrIndex++] = ' ';
-                    m_navigArrow[m_arrIndex] = '>';
-                    std::cout << "ArrIndex : " << m_arrIndex << "\n";
+                    swapArrow(m_arrIndex++);
                 }
                 break;
 
@@ -68,9 +64,14 @@ namespace menu {
         return -1;
     } 
 
+    void Arrow::swapArrow(int oldIndex) {
+        std::swap(m_navigArrow[oldIndex], m_navigArrow[m_arrIndex]);
+    }
+
     void Arrow::setArrow() {
-        m_navigArrow[m_arrIndex] = '>';
+        int oldIndex = m_arrIndex;
         m_arrIndex = 0;
+        swapArrow(oldIndex);
     }
 
 }
