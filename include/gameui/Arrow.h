@@ -63,6 +63,7 @@ namespace menu {
         void set_arrIndex(int idx);
         void setButtonPressed(char key);
         int moveArrow(int start, int end);
+        void swapArrow(int oldIndex);
         void setArrow();
     };
 }
