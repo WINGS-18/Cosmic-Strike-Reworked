@@ -21,7 +21,7 @@ namespace menu {
 
         virtual ~Node() = default;      //destructor
 
-        virtual void display(Arrow& arrow);
+        virtual void display(const Arrow& arrow);
 
         std::vector<Node*> getChildren();
 
@@ -41,7 +41,7 @@ namespace menu {
 
         int sizeOfAllParts() const;
 
-        void display(Arrow& arrow) override;
+        void display(const Arrow& arrow) override;
 
         int getOptionLen() override;
     };
