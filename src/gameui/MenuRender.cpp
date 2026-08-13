@@ -25,16 +25,20 @@ namespace menu {
         m_navigStack.push(root.get());
         char control;
         while(true) {
-            if(!m_navigStack.empty()) {
-                auto& top = m_navigStack.top();
-                top->display(arrow);
-            }
+            showScreen(arrow);
             control = Utility::pressKey();
             arrow.setButtonPressed(control);
             if(control == 'e')  removeCurrentState(arrow);
             if(control == 'd')  break;
             setCurrentState(arrow);
             Utility::clearScreen();
+        }
+    }
+
+    void MenuRender::showScreen(const Arrow& arrow) const {
+        if(!m_navigStack.empty()) {
+            auto& top = m_navigStack.top();
+            top->display(arrow);
         }
     }
 
