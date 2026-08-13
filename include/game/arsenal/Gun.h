@@ -4,7 +4,7 @@
 * All entities in the game might use guns, hence a dedicated class for gun.
 * Gun class basically has it's members that store bullets(Bullet.h).
 
-* What's new? :
+*What's new? :
     - This completely eliminates the heap allocations every frame.
     - Used 2 containers that are m_active and m_inactive.
     - m_ctive stores the bullets that are appearing on the screen and
@@ -14,7 +14,7 @@
     - we transfer these bullets between m_active to m_inactive which allows no
       heap allocations for Bullet.
 
-* Data Structures(DS) choice :
+*Data Structures(DS) choice :
     - Used 2 different DS std::vector for m_inactive and std::deque for m_active.
     - Used std::deque for m_active, because we need pop_front() operation, which
       is necessary to maintain the order of the bullets.
