@@ -7,7 +7,7 @@ namespace menu {
     Node::Node(std::string name)
         : m_menuName(std::move(name)) {}
 
-    void Node::display(Arrow& arrow) {
+    void Node::display(const Arrow& arrow) {
         for(int i = 0; const auto& child : m_children) {
             std::cout << arrow.printNavigArrow(i) << " " << child->m_menuName << std::endl;
             ++i;
@@ -37,7 +37,7 @@ namespace menu {
         return m_allParts.size();
     }
 
-    void Warehouse::display(Arrow& arrow) {
+    void Warehouse::display(const Arrow& arrow) {
         for(int i = 0; const auto& part : m_allParts) {
             std::cout << arrow.printNavigArrow(i) << " ";
             if(part.single()) {
