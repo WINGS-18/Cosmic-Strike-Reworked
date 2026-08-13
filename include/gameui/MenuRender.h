@@ -17,6 +17,8 @@ namespace menu {
         void removeCurrentState(Arrow& arrow);
         
         void menuLoop(std::unique_ptr<Node> root, Arrow& arrow);
+
+        void showScreen(const Arrow& arrow) const;
         
     };
 
