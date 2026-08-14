@@ -36,6 +36,16 @@ namespace menu {
         std::vector<cs::Part> m_parts;
         Eng::Slot m_placement;
         std::vector<Eng::Slot> m_allParts;
+
+        class Assembler {
+        private:
+            std::vector<std::vector<int>> m_entity;
+        public:
+            Assembler();
+
+            void printEntity(const std::vector<cs::Part>& parts) const;
+        };
+
     public:
         Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts);
 
