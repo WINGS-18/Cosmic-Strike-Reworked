@@ -74,4 +74,8 @@ namespace menu {
         swapArrow(oldIndex);
     }
 
+    int Arrow::getIndex() const {
+        return m_arrIndex;
+    }
+
 }
