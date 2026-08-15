@@ -29,9 +29,16 @@ namespace Eng {
 
 
     bool Slot::single() const {
-        if(m_first != -1 && m_second != -1)
-            return false;
+        if(m_first != -1 && m_second == -1)
+            return true;
         
-        return true;
+        return false;
+    }
+
+    int Slot::size() const {
+        if(single()) {
+            return 1;
+        }
+        return 2;
     }
 }
