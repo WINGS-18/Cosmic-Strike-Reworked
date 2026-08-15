@@ -14,6 +14,7 @@ namespace Eng {
         int operator[] (int index) const;
 
         bool single() const;
+        int size() const;
     };
 
 }
