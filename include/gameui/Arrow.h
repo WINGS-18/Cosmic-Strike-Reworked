@@ -64,5 +64,6 @@ namespace menu {
         int moveArrow(int start, int end);
         void swapArrow(int oldIndex);
         void setArrow();
+        int getIndex() const;
     };
 }
