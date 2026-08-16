@@ -4,6 +4,8 @@
 
 namespace menu {
 
+    Warehouse::Assembler Warehouse::m_asm;
+
     Node::Node(std::string name)
         : m_menuName(std::move(name)) {}
 
@@ -30,6 +32,10 @@ namespace menu {
         return m_children.size() - 1;
     }
 
+    void Node::shipMaker(int index) {
+        std::cout << "";
+    }
+
     Warehouse::Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts)
         : Node(std::move(name)), m_parts(std::move(parts)), m_placement(std::move(place)), m_allParts(std::move(allParts)) {}
 
@@ -52,5 +58,28 @@ namespace menu {
 
     int Warehouse::getOptionLen() {
         return sizeOfAllParts() - 1;
+    }
+
+    void Warehouse::shipMaker(int index) {
+        //m_asm.printEntity(m_parts);
+        m_asm.insertParts(index, m_placement, m_allParts);
+        m_asm.printEntity(m_parts);
+    }
+
+    void Warehouse::Assembler::printEntity(const std::vector<cs::Part>& parts) const {
+        for(const auto& row : m_entity) {
+            std::cout << "  ";
+            for(const auto& cell : row) {
+                std::cout << parts[cell].m_symbol;
+            }
+            std::cout << "\n\n\n";
+        }
+    }
+
+    void Warehouse::Assembler::insertParts(int index, const Eng::Slot& m_placement, const std::vector<Eng::Slot>& m_allParts) {
+        for(size_t i = 0; i < m_placement.size(); i++) {
+        std::cout << "Warehouse address inside function: " << this << std::endl;
+            m_entity[0][m_placement[i]] = m_allParts[index][i];
+        }
     }
 }
