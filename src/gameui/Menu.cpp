@@ -36,8 +36,8 @@ namespace menu {
         std::cout << "";
     }
 
-    Warehouse::Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts)
-        : Node(std::move(name)), m_parts(std::move(parts)), m_placement(std::move(place)), m_allParts(std::move(allParts)) {}
+    Warehouse::Warehouse(std::string name, Eng::Slot place, std::vector<Eng::Slot> allParts)
+        : Node(std::move(name)), m_placement(std::move(place)), m_allParts(std::move(allParts)) {}
 
     int Warehouse::sizeOfAllParts() const {
         return m_allParts.size();
@@ -47,9 +47,9 @@ namespace menu {
         for(int i = 0; const auto& part : m_allParts) {
             std::cout << arrow.printNavigArrow(i) << " ";
             if(part.single()) {
-                std::cout << m_parts[part[0]].m_symbol;
+                std::cout << m_asm.m_parts[part[0]].m_symbol;
             }else {
-                std::cout << m_parts[part[0]].m_symbol << " " << m_parts[part[1]].m_symbol;
+                std::cout << m_asm.m_parts[part[0]].m_symbol << " " << m_asm.m_parts[part[1]].m_symbol;
             }
             std::cout << "\n";
             i++;
@@ -63,14 +63,14 @@ namespace menu {
     void Warehouse::shipMaker(int index) {
         //m_asm.printEntity(m_parts);
         m_asm.insertParts(index, m_placement, m_allParts);
-        m_asm.printEntity(m_parts);
+        m_asm.printEntity();
     }
-
-    void Warehouse::Assembler::printEntity(const std::vector<cs::Part>& parts) const {
+    
+    void Warehouse::Assembler::printEntity() const {
         for(const auto& row : m_entity) {
             std::cout << "  ";
             for(const auto& cell : row) {
-                std::cout << parts[cell].m_symbol;
+                std::cout << m_asm.m_parts[cell].m_symbol;
             }
             std::cout << "\n\n\n";
         }
@@ -78,8 +78,21 @@ namespace menu {
 
     void Warehouse::Assembler::insertParts(int index, const Eng::Slot& m_placement, const std::vector<Eng::Slot>& m_allParts) {
         for(size_t i = 0; i < m_placement.size(); i++) {
-        std::cout << "Warehouse address inside function: " << this << std::endl;
             m_entity[0][m_placement[i]] = m_allParts[index][i];
         }
     }
+
+    const std::vector<std::vector<int>>& Warehouse::Assembler::getEntity() const noexcept {
+        return m_entity;
+    }
+
+    void Loadout::display(const Arrow& arrow) {
+        s.totalStats(Warehouse::m_asm.getEntity(), Warehouse::m_asm.m_parts);
+        s.displayStats();
+    }
+
+    void Loadout::shipMaker(int index) {
+        Warehouse::m_asm.printEntity();
+    }
+
 }
