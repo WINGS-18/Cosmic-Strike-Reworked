@@ -1,50 +1,61 @@
-/*
-@file Menu.h :
+// =======================================================================================
+// @file Menu.h
+// 
+// This header contains 3 major classes that handle the game's user interface.
+// =======================================================================================
 
-    * Menu.h header contains 3 major classes that handles
-      the game's user interface.
-    1) class Node :
-        * It is a default class that only has it's name and
-          childrens.
-        * It highlights to some sections that make you navigate
-          into other such sections.
+// 1) class Node :
+//    * It is a base class that only contains its name and its children nodes.
+//    * It acts as a menu item/section that highlights to let the user navigate 
+//      into other nested sections.
 
-    2) class Warehouse :
-        * This class contains elements that let user actually make
-          changes or work done.
-        * Understand role of Eng::Slot by reading comments provided
-          in the @file include/engine/Slot.h.
-        * It is also inherited from Node.
-    
-    3) class Assembler(Private nested class into Warehouse) :
-        * It is a nested class that contains one 2-d vector.
-        * It's vector member m_entity acts ship layout which user
-          is trying to build.
-        * Hence whatever parts user selects this vector is re-written
-          to resemble it.
+// 2) class Warehouse :
+//    * This class contains the specific UI elements that let the user actually 
+//      make modifications or get tasks done.
+//    * It inherits from the Node class.
+//    * To understand the role of Eng::Slot, please read the comments provided 
+//      in the file: include/engine/Slot.h.
 
-OVERALL IDEA :
+// 3) class Assembler (Private nested class inside Warehouse) :
+//    * It is a nested class that contains a single 2D vector member: m_entity.
+//    * The m_entity vector acts as the physical ship layout that the user is 
+//      currently trying to build.
+//    * Whenever the user selects new spaceship parts, this vector is completely 
+//      overwritten to resemble the updated blueprint layout.
 
-    * Whenever user starts the game the Node or it's child class
-      names are displayed and user can safely navigate through it's
-      intrested section.
-    * The childrens of the current node are displayed.
-    * For building own ship when user enters into specific menu of
-      of Warehouse class and chooses the part, we use m_placement that
-      tells where this part should be positioned, and using m_allParts to
-      overwrite the data of m_entity.
-    * I specifically choosed having it only m_entity which is a 2-d vector
-      becuase we no need of editing the main player object.
-    * Using this m_entity data all other members of set properly and also
-      user should only see how ship looks, and not how the internal player
-      object looks.
-    * So we transfer ie., we use move semantics to transfer this m_entity
-      into actual player object.
-    * Also we use the m_parts vector here, so instead of making copies i've
-      decided to use only one such instance, and moving it from gameui to the
-      renderer. Beacuse when gameui is running the renderer won't run and when
-      renderer is running gameui won't run.
-*/
+// =======================================================================================
+// OVERALL ARCHITECTURE IDEA :
+// =======================================================================================
+
+// * Core UI Flow:
+//   - Whenever the user starts the game, the names of the current Node (or its 
+//     derived child classes) are displayed on-screen.
+//   - The user can safely navigate through these sections, and the UI will 
+//     render the children of the currently active node.
+
+// * The Ship Building System:
+//   - When the user enters the specific warehouse menu to build their spaceship, 
+//     they select parts from the m_allParts database.
+//   - We use m_placement to determine exactly where the selected part should 
+//     be positioned, and then we overwrite the data inside the m_entity grid.
+//   - Using a raw 2D vector (m_entity) for editing is a deliberate design choice: 
+//     it prevents us from constantly modifying or corrupting the live, active 
+//     player object while the user is still experimenting in the menu.
+//   - This decouples the visual preview from the backend state, ensuring the 
+//     user only sees how the ship *looks* during assembly without prematurely 
+//     affecting the internal mechanics of the live player object.
+
+// * Zero-Allocation Optimization via Move Semantics:
+//   - Once the user finalizes their design and finishes building, we use 
+//     move semantics (std::move) to efficiently transfer the compiled m_entity 
+//     data directly into the real, live player object.
+//   - We apply this exact same strict turn-taking strategy to the m_parts vector. 
+//     Instead of creating heavy, redundant memory copies, we maintain a single 
+//     instance and move it back and forth between the UI and the Renderer.
+//   - This is perfectly optimized because the two systems run exclusively: 
+//     when the Game UI is processing input, the Renderer is asleep; and when the 
+//     Renderer is drawing frames, the Game UI logic is completely frozen.
+
 
 #pragma once
 
@@ -82,32 +93,47 @@ namespace menu {
 
     class Warehouse : public Node {
     private:
-        std::vector<cs::Part> m_parts;
         Eng::Slot m_placement;
         std::vector<Eng::Slot> m_allParts;
-
+        
+        
+        //static member coz only one assembler must exist for different Warehouse instances.
+        
+    public:
         class Assembler {
         private:
             std::vector<std::vector<int>> m_entity = {{0, 0, 0, 0, 0}};
         public:
+            std::vector<cs::Part> m_parts = cs::GameData::getParts();
             Assembler() = default;
-
-            void printEntity(const std::vector<cs::Part>& parts) const;
+            
+            void printEntity() const;
             void insertParts(int index, const Eng::Slot& m_placement, const std::vector<Eng::Slot>& m_allParts);
+            const std::vector<std::vector<int>>& getEntity() const noexcept;
         };
 
-        //static member coz only one assembler must exist for different Warehouse instances.
         static Assembler m_asm;
-
-    public:
-
-        Warehouse(std::string name, std::vector<cs::Part> parts, Eng::Slot place, std::vector<Eng::Slot> allParts);
+        
+        Warehouse(std::string name, Eng::Slot place, std::vector<Eng::Slot> allParts);
 
         int sizeOfAllParts() const;
 
         void display(const Arrow& arrow) override;
-
+        
         int getOptionLen() override;
+        
+        void shipMaker(int index) override;
+
+    };
+      
+    class Loadout : public Node {
+    private:
+        cs::st::Stats s;
+    
+    public:
+        using Node::Node;
+        
+        void display(const Arrow& arrow) override;
 
         void shipMaker(int index) override;
     };
