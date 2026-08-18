@@ -29,5 +29,13 @@ namespace cs {
                 return 5;
             }
         }
+
+        void Stats::displayStats() const noexcept {
+            std::cout << "\n\nStats : \n";
+            std::cout << "\tHP : " << m_hp;
+            std::cout << "\n\tAttack : " << m_attack;
+            std::cout << "\n\tDefense : " << m_defense;
+            std::cout << "\n\tShield : " << m_shield;
+        }
     }
 }
