@@ -27,6 +27,8 @@ namespace cs {
 
             int damageDealer(int def);      //calculates the total damage dealt
 
+            void displayStats() const noexcept;
+
         };
 
     }
