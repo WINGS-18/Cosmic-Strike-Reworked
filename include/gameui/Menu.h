@@ -88,6 +88,8 @@ namespace menu {
         virtual int getOptionLen();
 
         virtual void shipMaker(int index);
+
+        const std::string& getMenuName() const;
     };
 
 
@@ -102,7 +104,7 @@ namespace menu {
     public:
         class Assembler {
         private:
-            std::vector<std::vector<int>> m_entity = {{0, 0, 0, 0, 0}};
+            std::vector<std::vector<int>> m_entity = {{15, 15, 15, 15, 15}};
         public:
             std::vector<cs::Part> m_parts = cs::GameData::getParts();
             Assembler() = default;
