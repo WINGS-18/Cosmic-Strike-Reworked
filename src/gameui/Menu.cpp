@@ -61,7 +61,6 @@ namespace menu {
     }
 
     void Warehouse::shipMaker(int index) {
-        //m_asm.printEntity(m_parts);
         m_asm.insertParts(index, m_placement, m_allParts);
         m_asm.printEntity();
     }

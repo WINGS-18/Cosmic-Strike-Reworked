@@ -89,7 +89,6 @@ namespace menu {
 
         virtual void shipMaker(int index);
 
-        const std::string& getMenuName() const;
     };
 
 
