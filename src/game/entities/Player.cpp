@@ -4,14 +4,11 @@
 namespace cs {
 
     //constructor
-    Player::Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun& g, const std::vector<Part>& parts) : Character(ed, isAl, xny, parts) {
-        this->m_playerGun = g;
-        std::cout << "Player created\n";
-    }
+    Player::Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun g, const std::vector<Part>& parts)
+        : Character(ed, isAl, xny, parts), m_playerGun(std::move(g)) {}
 
     //controls user movement
     void Player::userMovement(char key) {
-        std::cout << "Entered\n";
         switch (key) {
         case 'a':
             if(m_coord.x > 0)   m_coord.x--;
