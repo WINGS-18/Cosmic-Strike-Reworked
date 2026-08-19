@@ -43,7 +43,8 @@ namespace menu {
     enum class Buttons {
         ENTER = 13,
         PAGE_UP = 33,
-        PAGE_DOWN = 34
+        PAGE_DOWN = 34,
+        NONE = 290
     };
 
 
