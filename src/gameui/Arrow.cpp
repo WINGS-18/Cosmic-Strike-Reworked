@@ -17,7 +17,6 @@ namespace menu {
     void Arrow::set_arrIndex(int idx) {m_arrIndex = idx;}
 
     void Arrow::setButtonPressed(char key) {
-        std::cout << key;
         switch (key) {
             case 13 :
                 m_pressed = Buttons::ENTER;
@@ -32,6 +31,7 @@ namespace menu {
                 break;
             
             default:
+                m_pressed = Buttons::NONE;
                 break;
         }
     }
@@ -46,20 +46,20 @@ namespace menu {
                 return oldIndex;
                 break;
                 
-                case Buttons::PAGE_UP :
+            case Buttons::PAGE_UP :
                 if(m_arrIndex != start) {
                     swapArrow(m_arrIndex--);
                 }
                 break;
-                
-                case Buttons::PAGE_DOWN :
+            
+            case Buttons::PAGE_DOWN :
                 if(m_arrIndex != end) {
                     swapArrow(m_arrIndex++);
                 }
                 break;
 
-        default:
-            break;
+            default:
+                break;
         }
         return -1;
     } 
