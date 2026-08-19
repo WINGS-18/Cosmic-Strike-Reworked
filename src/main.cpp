@@ -15,8 +15,6 @@ int main() {
 //     std::vector<cs::Enemy> aliveEnemies;
 //     std::vector<cs::Enemy> deadEnemies;
 //     cs::GameData::enemyMaker(deadEnemies, cs::GameData::enemLay(), randomPool, parts, 0);
-//     std::cout << deadEnemies.size() << std::endl;
-//     std::cout << aliveEnemies.size() << std::endl;
 //     cs::Render::getRenderer().gameLoop(ships, parts, deadEnemies, aliveEnemies);
     auto root = std::make_unique<menu::Node> ("Menu");
     auto play = std::make_unique<menu::Node> ("Play");
