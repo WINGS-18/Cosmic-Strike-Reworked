@@ -12,6 +12,10 @@ namespace cs {
         }
 
         void Stats::totalStats(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts) {
+            m_hp = 0;
+            m_attack = 0;
+            m_defense = 0;
+            m_shield = 0;
             for(const auto& row : entityData){
                 for(const auto& cell : row){
                     m_hp += parts[cell].m_healthPoints;     //adds individual stats
