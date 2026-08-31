@@ -36,3 +36,18 @@ char Utility::keyGiver() {
 char Utility::pressKey() {
     return _getch();
 }
+
+void Utility::displayFinalScore(int score) {
+
+    Utility::clearScreen();
+    std::cout << "========================================\n";
+    std::cout << "||          <--GAME OVER-->           ||\n";
+    std::cout << "========================================\n\n";
+    
+    std::cout << "       Final Score: [ " << score << " ] \n\n";
+    
+    std::cout << "========================================\n";
+    std::cout << "||   Press 'e' to return to menu...   ||\n";
+    std::cout << "========================================\n";
+
+}

@@ -20,4 +20,6 @@ namespace Utility {
 
     char keyGiver();        //returns the key that is pressed
     char pressKey();
+
+    void displayFinalScore(int score);
 }
