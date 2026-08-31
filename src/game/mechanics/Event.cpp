@@ -21,6 +21,7 @@ namespace cs::col {
 
             case possibleAgents::Enemy_vs_Bullet :
                 a.m_enemyPtr->survivalCheck(a.m_userPtr);
+                if(!a.m_enemyPtr->getIsAlive()) a.m_userPtr->addScore();
                 a.m_userPtr->m_playerGun.hitBullet(a.m_enemyPtr->m_coord.y, a.m_enemyPtr->getSpeed());
                 break;
 
