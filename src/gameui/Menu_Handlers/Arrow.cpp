@@ -18,15 +18,15 @@ namespace menu {
 
     void Arrow::setButtonPressed(char key) {
         switch (key) {
-            case 13 :
+            case 32 :
                 m_pressed = Buttons::ENTER;
                 break;
 
-            case 'a' :
+            case 'w' :
                 m_pressed = Buttons::PAGE_UP;
                 break;
 
-            case 'b' :
+            case 's' :
                 m_pressed = Buttons::PAGE_DOWN;
                 break;
             
