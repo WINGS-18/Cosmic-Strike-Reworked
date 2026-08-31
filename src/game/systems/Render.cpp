@@ -29,18 +29,20 @@ namespace cs {
                 count = 0;
             }
             key = Utility::keyGiver();
-            if(key == 'e')  break;
+            if(key == 'q')  break;
             ships[0].userMovement(key);
             collisionCheck.collisionHandler(aliveEnemies, ships);
             insertEntity(ships, parts);
             insertEntity(ships[0].m_playerGun.m_active, parts);
             insertEntity(aliveEnemies, parts);
+            insertMessage(ships[0]);
+            drawMessage();
             drawFrame();
             Sleep(80);
             Utility::clearScreen();
             count++;
         }
-        Utility::showCursor();
+        Utility::displayFinalScore(ships[0].score);
     }
 
     void Render::drawFrame() {      //draws the frame/grid
@@ -56,5 +58,27 @@ namespace cs {
         for(auto& row : frame) {
             std::fill(row.begin(), row.end(), ' ');
         }
+    }
+
+    void Render::insertMessage(const Player& p) {
+        message[0] = 'S';
+        message[1] = 'c';
+        message[2] = 'o';
+        message[3] = 'r';
+        message[4] = 'e';
+        message[5] = ' ';
+        message[6] = ':';
+        message[7] = ' ';
+        int temp = p.score;
+        message[8] = (temp / 10) + '0';
+        message[9] = (temp % 10) + '0';
+    }
+
+    void Render::drawMessage() {
+        for(char cell : message) {
+            std::cout << cell;
+        }
+
+        std::cout << "\n\n\n";
     }
 }
