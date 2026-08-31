@@ -51,5 +51,12 @@ To compile the game, use any modern C++ compiler (like MinGW/GCC or MSVC). Make 
 
 Example using `g++`:
 ```bash
-g++ -I include src/main.cpp src/engine/*.cpp src/game/*.cpp -o game.exe
+
+Compilation :
+  g++ -std=c++20 -Iinclude src/main.cpp src/engine/*.cpp src/game/arsenal/*.cpp src/game/assets/*.cpp src/game/entities/*.cpp src/game/mechanics/*.cpp src/game/systems/*.cpp src/gameui/Integrators/*.cpp src/gameui/Menu_Handlers/*.cpp -o game.exe
+
+Run :
+  ./game.exe
+
+
 ```
