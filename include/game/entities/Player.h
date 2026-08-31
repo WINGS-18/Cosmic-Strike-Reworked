@@ -16,6 +16,7 @@ namespace cs {
     class Player : public Character {
     public:
         Arsenal::Gun m_playerGun;
+        int score = 0;
         
         //constructor
         Player(std::vector<std::vector<int>> ed, bool isAl, Eng::Vector2C xny, Arsenal::Gun g, const std::vector<Part>& parts);
@@ -25,5 +26,7 @@ namespace cs {
         void gunFire();     //Lets user fire bullets
 
         void survivalCheck(Character* obj);     //Triggers hp reduction and also checks weather alive.
+
+        void addScore();
     };
 }

@@ -33,4 +33,8 @@ namespace cs {
         HPReduction(obj);
         deathCondition();
     }
+
+    void Player::addScore() {
+        score++;
+    }
 }
