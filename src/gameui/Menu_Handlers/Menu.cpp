@@ -81,7 +81,7 @@ namespace menu {
         }
     }
 
-    const std::vector<std::vector<int>>& Warehouse::Assembler::getEntity() const noexcept {
+    std::vector<std::vector<int>>& Warehouse::Assembler::getEntity() noexcept {
         return m_entity;
     }
 
@@ -101,6 +101,47 @@ namespace menu {
 
     void Loadout::shipMaker(int index) {
         Warehouse::m_asm.printEntity();
+    }
+
+    void PlayObject::display(const Arrow& arrow) {
+        m_gm.startGame(Warehouse::m_asm.getEntity(), Warehouse::m_asm.changed());
+    }
+
+    void HelpObject::display(const Arrow& arrow) {
+        std::cout << "==================================================\n";
+        std::cout << "                game manual & controls            \n";
+        std::cout << "==================================================\n\n";
+
+        std::cout << "  [ gameplay movement ]\n";
+        std::cout << "    a - move ship left\n";
+        std::cout << "    d - move ship right\n\n";
+
+        std::cout << "  [ combat systems ]\n";
+        std::cout << "    - gun fires automatically at all times.\n";
+        std::cout << "    - no reloading required.\n";
+        std::cout << "    - just focus on moving to aim at enemies!\n\n";
+
+        std::cout << "  [ menu navigation ]\n";
+        std::cout << "    w     - move cursor up\n";
+        std::cout << "    s     - move cursor down\n";
+        std::cout << "    space - confirm / enter selection\n";
+        std::cout << "    q     - go back / exit current menu\n\n";
+
+        std::cout << "  [ warehouse & ship selection ]\n";
+        std::cout << "    - navigate parts using 'w' and 's'.\n";
+        std::cout << "    - do not press space to choose a part.\n";
+        std::cout << "    - whichever part the cursor points to is\n";
+        std::cout << "      instantly equipped to your ship!\n\n";
+
+        std::cout << "  [ !! crucial notes & glitches !! ]\n";
+        std::cout << "    - how to start match: when pointing on play,\n";
+        std::cout << "      press space first, then press 'd'.\n";
+        std::cout << "    - instant exit: pressing 'd' inside any menu\n";
+        std::cout << "      will immediately close down the entire game.\n\n";
+
+        std::cout << "==================================================\n";
+        std::cout << "            press 'q' to return to main menu      \n";
+        std::cout << "==================================================\n";
     }
 
 }

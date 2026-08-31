@@ -65,6 +65,7 @@
 #include "game/assets/GameData.h"
 #include "engine/Slot.h"
 #include "gameui/Menu_Handlers/Arrow.h"
+#include "gameui/Integrators/GameManager.h"
 
 namespace menu {
 
@@ -110,7 +111,7 @@ namespace menu {
             
             void printEntity() const;
             void insertParts(int index, const Eng::Slot& m_placement, const std::vector<Eng::Slot>& m_allParts);
-            const std::vector<std::vector<int>>& getEntity() const noexcept;
+            std::vector<std::vector<int>>& getEntity() noexcept;
             bool changed() const noexcept;
         };
 
@@ -138,6 +139,23 @@ namespace menu {
         void display(const Arrow& arrow) override;
 
         void shipMaker(int index) override;
+    };
+    
+    class PlayObject : public Node {
+    private:
+        gamr::GameManager m_gm;
+    public:
+        using Node::Node;
+        
+        void display(const Arrow& arrow) override;
+        
+    };
+    
+    class HelpObject : public Node {
+    public:
+        using Node::Node;
+
+        void display(const Arrow& arrow) override;
     };
 
 }
