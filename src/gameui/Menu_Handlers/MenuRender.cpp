@@ -10,20 +10,20 @@ namespace menu {
             int frame = arrow.moveArrow(0, m_navigStack.top()->getOptionLen());
             const auto& topChildren = m_navigStack.top()->getChildren();
             if(frame != -1 && (!topChildren.empty())) {
-                Node* topNext = topChildren[frame]; 
+                Node* topNext = topChildren[frame];
                 m_navigStack.push(topNext);
             }
         }
     }
 
     void MenuRender::removeCurrentState(Arrow& arrow) {
-        if(!m_navigStack.empty()) {
+        if(m_navigStack.size() > 1) {
             m_navigStack.pop();
             arrow.setArrow();
         }
     }
 
-    void MenuRender::menuLoop(std::unique_ptr<Node> root, Arrow& arrow) {
+    std::unique_ptr<Node> MenuRender::menuLoop(std::unique_ptr<Node> root, Arrow& arrow) {
         m_navigStack.push(root.get());
         char control;
         while(true) {
@@ -31,11 +31,14 @@ namespace menu {
             showScreen(arrow);
             control = Utility::pressKey();
             arrow.setButtonPressed(control);
-            if(control == 'e')  removeCurrentState(arrow);
+            if(control == 'q' && m_navigStack.size() == 1)  break;  
+            if(control == 'q')  removeCurrentState(arrow);
             if(control == 'd')  break;
             setCurrentState(arrow);
             Utility::clearScreen();
         }
+
+        return root;
     }
 
     void MenuRender::showScreen(const Arrow& arrow) const {
@@ -46,8 +49,10 @@ namespace menu {
     }
 
     void MenuRender::callShipMaker(int index) const {
-        auto& top = m_navigStack.top();
-        top->shipMaker(index);
+        if(!m_navigStack.empty()) {
+            auto& top = m_navigStack.top();
+            top->shipMaker(index);
+        }
     }
 
 }
