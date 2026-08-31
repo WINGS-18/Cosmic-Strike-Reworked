@@ -7,6 +7,7 @@ std::unique_ptr<menu::Node> components::makeMenu() {
     auto root = std::make_unique<menu::Node> ("Menu");
     auto play = std::make_unique<menu::PlayObject> ("Play");
     auto workshop = std::make_unique<menu::Node> ("Workshop");
+    auto help = std::make_unique<menu::HelpObject> ("Help");
     auto shipyard = std::make_unique<menu::Node> ("Shipyard");
     auto loadout = std::make_unique<menu::Loadout> ("Loadout");
     auto core = std::make_unique<menu::Warehouse> ("Core", Eng::Slot{2}, std::vector<Eng::Slot>{Eng::Slot{3}, Eng::Slot{7}, Eng::Slot{10}, Eng::Slot{12}});
@@ -19,6 +20,7 @@ std::unique_ptr<menu::Node> components::makeMenu() {
     workshop->addChild(std::move(loadout));
     root->addChild(std::move(play));
     root->addChild(std::move(workshop));
+    root->addChild(std::move(help));
 
     return root;
 }
@@ -33,4 +35,6 @@ void components::beginGame() {
     menu::MenuRender mr;
     
     root = std::move(mr.menuLoop(std::move(root), arrow));
+
+    Utility::showCursor();
 }
