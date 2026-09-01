@@ -26,6 +26,19 @@ namespace cs {
                 if(!deadEnemies.empty())
                     GameData::enemyBirth(deadEnemies, aliveEnemies);
                 GameData::enemyMove(aliveEnemies);
+
+                for(int i = 0; i < aliveEnemies.size();) {
+                    if(!aliveEnemies[i].getIsAlive()) {
+                        std::swap(aliveEnemies[i], aliveEnemies.back());
+
+                        aliveEnemies.back().m_coord.y = 0;
+                        deadEnemies.push_back(std::move(aliveEnemies.back()));
+
+                        aliveEnemies.pop_back();
+                    }else {
+                        i++;
+                    }
+                }
                 count = 0;
             }
             key = Utility::keyGiver();
