@@ -32,6 +32,7 @@ namespace cs {
                         std::swap(aliveEnemies[i], aliveEnemies.back());
 
                         aliveEnemies.back().m_coord.y = 0;
+                        aliveEnemies.back().getStatsManager().m_current.m_hp = aliveEnemies.back().getStatsManager().m_base.m_hp;
                         deadEnemies.push_back(std::move(aliveEnemies.back()));
 
                         aliveEnemies.pop_back();
