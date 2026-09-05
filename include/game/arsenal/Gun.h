@@ -27,38 +27,27 @@
 
 
 #pragma once
-#include <vector>
-#include <deque>
-#include "engine/Vector2C.h"
-#include "game/arsenal/Bullet.h"
+
+#include "game/arsenal/BulletPool.h"
+#include "game/arsenal/Magazine.h"
 
 namespace cs {
 
     namespace Arsenal {
 
         class Gun {
-          public:
-            std::deque<Bullet> m_active;
-            std::vector<Bullet> m_inactive;
+        private:
+            BulletPool m_pool;
+            Magazine m_magazine;
+        public:
+            Gun() = default;
+            Gun(int maxAmmo);
 
-            Gun() {}
+            void fire(const Eng::Vector2C& host);
 
-            void bulletLoading(std::vector<Bullet>&& bul);      //loads the bullets acts as an init method
-
-            Bullet inactive_pop(const Eng::Vector2C& host);     //pops the bullet from inactive container
-
-            Bullet active_pop();        //pops the bullet from active container and rerturns it
-
-            void inactive_push();       //pushes the bullet into the inactive container
-
-            void active_push(const Eng::Vector2C& host);        //pushes the bullets into active container
-
-            void bulletAdder(const Eng::Vector2C& host);        //performs rotation
-
-            void bulletMove();    //increments the bullets position making it move
-
-            void hitBullet(int yCoordinate, int speed);
-
+            BulletPool& getPool() noexcept;
         };
+
     }
+
 }
