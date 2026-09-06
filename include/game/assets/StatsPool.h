@@ -19,6 +19,8 @@ namespace cs {
 
             StatsPool() = default;   //constructor
             StatsPool(const std::vector<std::vector<int>>& entityData, const std::vector<Part>& parts);
+
+            void reset();
         };
 
     }
