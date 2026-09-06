@@ -8,4 +8,11 @@ namespace cs::st {
             m_current = m_base;
         }
 
+    void StatsPool::reset() {
+        m_current.m_hp = m_base.m_hp;
+        m_current.m_attack = m_base.m_attack;
+        m_current.m_defense = m_base.m_defense;
+        m_current.m_shield = m_base.m_shield;
+    }
+
 }
