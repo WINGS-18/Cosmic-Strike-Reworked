@@ -4,8 +4,8 @@
 namespace Integrator {
     
     cs::Player Play::getPlayer(std::vector<std::vector<int>> entity, bool changed, const std::vector<cs::Part>& parts) {
-        cs::Arsenal::Gun g;
-        g.bulletLoading(cs::GameData::bulletLayout());
+        cs::Arsenal::Gun g(100, 40);
+        g.getPool().bulletLoading(cs::GameData::bulletLayout());
         if(changed) {
             return cs::Player(std::move(entity), true, {0, 24}, std::move(g), parts);
         }else {
