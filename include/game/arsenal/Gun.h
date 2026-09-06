@@ -41,9 +41,11 @@ namespace cs {
             Magazine m_magazine;
         public:
             Gun() = default;
-            Gun(int maxAmmo);
+            Gun(int maxAmmo, int reloadTime);
 
             void fire(const Eng::Vector2C& host);
+
+            bool isReloading() const noexcept;
 
             BulletPool& getPool() noexcept;
         };
