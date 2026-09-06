@@ -48,4 +48,8 @@ namespace cs {
     void Character::makeDead() {
         m_isAlive = false;
     }
+
+    void Character::resetStats() {
+        m_statsMan.reset();
+    }
 }
