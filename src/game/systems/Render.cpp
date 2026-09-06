@@ -3,7 +3,7 @@
 #include "game/assets/GameData.h"
 #include "game/mechanics/Collision.h"
 #include <windows.h>
-#include <iostream>
+
 
 namespace cs {
 
@@ -20,26 +20,15 @@ namespace cs {
         col::Collision collisionCheck(GameData::makeEventPool());
         Utility::hideCursor();
         while(true) {
-            ships[0].gunFire();
+            ships[0].m_playerGun.fire(ships[0].m_coord);
             frameReset();
-            if(count == 10) {
+            if(count == 20) {
                 if(!deadEnemies.empty())
                     GameData::enemyBirth(deadEnemies, aliveEnemies);
                 GameData::enemyMove(aliveEnemies);
 
-                for(int i = 0; i < aliveEnemies.size();) {
-                    if(!aliveEnemies[i].getIsAlive()) {
-                        std::swap(aliveEnemies[i], aliveEnemies.back());
-
-                        aliveEnemies.back().m_coord.y = 0;
-                        aliveEnemies.back().getStatsManager().m_current.m_hp = aliveEnemies.back().getStatsManager().m_base.m_hp;
-                        deadEnemies.push_back(std::move(aliveEnemies.back()));
-
-                        aliveEnemies.pop_back();
-                    }else {
-                        i++;
-                    }
-                }
+                GameData::transferDeadEnemies(aliveEnemies,deadEnemies);
+                
                 count = 0;
             }
             key = Utility::keyGiver();
@@ -47,12 +36,11 @@ namespace cs {
             ships[0].userMovement(key);
             collisionCheck.collisionHandler(aliveEnemies, ships);
             insertEntity(ships, parts);
-            insertEntity(ships[0].m_playerGun.m_active, parts);
+            insertEntity(ships[0].m_playerGun.getPool().m_active, parts);
             insertEntity(aliveEnemies, parts);
-            insertMessage(ships[0]);
-            drawMessage();
+            m_messages.showMessage(ships[0]);
             drawFrame();
-            Sleep(80);
+            Sleep(60);
             Utility::clearScreen();
             count++;
         }
@@ -74,25 +62,5 @@ namespace cs {
         }
     }
 
-    void Render::insertMessage(const Player& p) {
-        message[0] = 'S';
-        message[1] = 'c';
-        message[2] = 'o';
-        message[3] = 'r';
-        message[4] = 'e';
-        message[5] = ' ';
-        message[6] = ':';
-        message[7] = ' ';
-        int temp = p.score;
-        message[8] = (temp / 10) + '0';
-        message[9] = (temp % 10) + '0';
-    }
 
-    void Render::drawMessage() {
-        for(char cell : message) {
-            std::cout << cell;
-        }
-
-        std::cout << "\n\n\n";
-    }
 }
