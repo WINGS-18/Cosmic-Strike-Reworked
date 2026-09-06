@@ -25,8 +25,8 @@ namespace cs::col {
             if(obj.getIsAlive()) {
                 if(obj.m_coord.y == user[0].m_coord.y) {
                     addEvent(&obj, &user[0], col::possibleAgents::Enemy_vs_Player);
-                } else if(!user[0].m_playerGun.m_active.empty()) { 
-                    for(Arsenal::Bullet& b : user[0].m_playerGun.m_active) {
+                } else if(!user[0].m_playerGun.getPool().m_active.empty()) { 
+                    for(Arsenal::Bullet& b : user[0].m_playerGun.getPool().m_active) {
                         if(b.m_bul_isAlive && obj.m_coord == b.m_bulCoord) { 
                             addEvent(&obj, &user[0], col::possibleAgents::Enemy_vs_Bullet);
                         }
