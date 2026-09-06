@@ -48,5 +48,8 @@ namespace cs {
         void makeAlive();       //makes entities alive
 
         void makeDead();        //makes entities dead
+
+        void resetStats() noexcept;
+
     };
 }
