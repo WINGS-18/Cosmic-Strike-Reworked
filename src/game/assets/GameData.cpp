@@ -102,6 +102,7 @@ namespace cs::GameData {
     void enemyBirth(std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies) {
         aliveEnemies.push_back(deadEnemies.back());
         aliveEnemies.back().makeAlive();
+        aliveEnemies.back().resetStats();
         deadEnemies.pop_back();
     }
 
@@ -109,6 +110,22 @@ namespace cs::GameData {
         for(auto& enemy : aliveEnemies) {
             if(enemy.m_coord.y < 24)
                 enemy.m_coord.yCoordinateUpdate(enemy.getSpeed());
+        }
+    }
+
+    void transferDeadEnemies(std::vector<Enemy>& aliveEnemies, std::vector<Enemy>& deadEnemies) {
+        for(int i = 0; i < aliveEnemies.size();) {
+            if(!aliveEnemies[i].getIsAlive()) {
+                std::swap(aliveEnemies[i], aliveEnemies.back());
+
+                aliveEnemies.back().m_coord.y = 0;
+                aliveEnemies.back().getStatsManager().m_current.m_hp = aliveEnemies.back().getStatsManager().m_base.m_hp;
+                deadEnemies.push_back(std::move(aliveEnemies.back()));
+
+                aliveEnemies.pop_back();
+            }else {
+                i++;
+            }
         }
     }
 }
