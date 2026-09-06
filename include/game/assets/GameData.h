@@ -36,4 +36,6 @@ namespace cs::GameData {
 
     void enemyMove(std::vector<Enemy>& aliveEnemies);       //updates enemies coordinate to make them move.
 
+    void transferDeadEnemies(std::vector<Enemy>& aliveEnemies, std::vector<Enemy>& deadEnemies);
+
 }
