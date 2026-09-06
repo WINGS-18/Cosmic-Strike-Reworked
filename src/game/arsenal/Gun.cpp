@@ -4,8 +4,8 @@ namespace cs {
 
     namespace Arsenal {
 
-        Gun::Gun(int maxAmmo)
-            : m_magazine(maxAmmo) {}
+        Gun::Gun(int maxAmmo, int reloadTime)
+            : m_magazine(maxAmmo, reloadTime) {}
 
         void Gun::fire(const Eng::Vector2C& host) {
             m_magazine.setState();
@@ -16,6 +16,11 @@ namespace cs {
             }else {
                 m_pool.inactive_push();
             }
+            m_magazine.reload();
+        }
+
+        bool Gun::isReloading() const noexcept {
+            return m_magazine.isReloading();
         }
 
         BulletPool& Gun::getPool() noexcept {return m_pool;}
