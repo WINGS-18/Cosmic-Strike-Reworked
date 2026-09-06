@@ -14,6 +14,8 @@
 
 #include "game/entities/Player.h"
 #include "game/entities/Enemy.h"
+#include "game/systems/MessageRender.h"
+#include <iostream>
 #include <array>
 
 //Axes multipliers : 
@@ -37,7 +39,7 @@ namespace cs {
 
     public:
         std::array<std::array<char, 25>, 25> frame;
-        std::array<char, 10> message;
+        MessageRender m_messages;
         
         static Render& getRenderer();
 
@@ -60,13 +62,8 @@ namespace cs {
         template <typename Entity>
         void insertEntity(const std::deque<Entity>& e, const std::vector<Part>& parts);
 
-        //this function only displays player's score
-        //hence i've made this function like this for now.
-        void insertMessage(const Player& p);
-
         void frameReset();      //reset the grid to blank spaces
         void drawFrame();       //draws the frame on the terminal
-        void drawMessage();
         void gameLoop(std::vector<Player>& ships, const std::vector<Part>& parts, std::vector<Enemy>& deadEnemies, std::vector<Enemy>& aliveEnemies);        //main loop that runs the game
     };
 
