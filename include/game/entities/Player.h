@@ -23,8 +23,6 @@ namespace cs {
 
         void userMovement(char key);        //makes user move or interact based on the keyboard inputs
 
-        void gunFire();     //Lets user fire bullets
-
         void survivalCheck(Character* obj);     //Triggers hp reduction and also checks weather alive.
 
         void addScore();
