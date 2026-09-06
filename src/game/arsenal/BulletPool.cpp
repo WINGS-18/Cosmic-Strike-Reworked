@@ -1,5 +1,4 @@
 #include "game/arsenal/BulletPool.h"
-#include <iostream>
 
 namespace cs::Arsenal {
 
@@ -84,7 +83,7 @@ namespace cs::Arsenal {
         int idx;
         for (size_t i = 0; i <= speed; i++) {
             idx = yCoordinate + i;
-            if (idx == m_active.size()) --idx;
+            if (idx >= m_active.size()) idx = m_active.size() - 1;
             m_active[idx].m_bul_isAlive = false;
         }
     }
