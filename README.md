@@ -43,6 +43,7 @@ This project is a complete architectural refactor of a simple single-file game i
 * `a` - Move Left
 * `d` - Move Right
 * `e` - Exit Game
+* Other controls are listed in the help menu
 * *Note: Firing is automatic!*
 
 ## 🛠️ Compilation
