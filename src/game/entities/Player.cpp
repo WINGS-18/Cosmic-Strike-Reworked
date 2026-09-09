@@ -29,7 +29,19 @@ namespace cs {
         deathCondition();
     }
 
+    const Arsenal::Gun& Player::getPlayerGun() const{
+        return m_playerGun;
+    }
+
+    Arsenal::Gun& Player::getPlayerGun() {
+        return m_playerGun;
+    }
+
     void Player::addScore() {
-        score++;
+        m_score++;
+    }
+
+    int Player::getScore() const noexcept {
+        return m_score;
     }
 }
