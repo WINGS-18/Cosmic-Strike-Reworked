@@ -7,8 +7,8 @@ namespace cs {
         Gun::Gun(int maxAmmo, int reloadTime)
             : m_magazine(maxAmmo, reloadTime) {}
 
-        void Gun::fire(const Eng::Vector2C& host) {
-            m_magazine.setState();
+        void Gun::fire(const Eng::Vector2C& host, char key) {
+            m_magazine.setState(key);
             m_magazine.decrementMagazineAmmo();
             m_pool.bulletMove();
             if(m_magazine.m_currState == Magazine::State::ready) {
@@ -24,6 +24,10 @@ namespace cs {
         }
 
         BulletPool& Gun::getPool() noexcept {return m_pool;}
+
+        int Gun::getNumberOfBullets() const noexcept {return m_magazine.getCurrAmmo();}
+
+        int Gun::getTotalNumberOfBullets() const noexcept {return m_magazine.getMaxAmmo();}
 
     }
 
