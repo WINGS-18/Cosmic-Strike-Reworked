@@ -43,11 +43,15 @@ namespace cs {
             Gun() = default;
             Gun(int maxAmmo, int reloadTime);
 
-            void fire(const Eng::Vector2C& host);
+            void fire(const Eng::Vector2C& host, char key);
 
             bool isReloading() const noexcept;
 
             BulletPool& getPool() noexcept;
+
+            int getNumberOfBullets() const noexcept;
+
+            int getTotalNumberOfBullets() const noexcept;
         };
 
     }
