@@ -8,11 +8,13 @@ namespace cs {
             : m_currAmmo(maxAmmo), m_maxAmmo(maxAmmo),
               m_reloadTimeInFrames(reloadTime), m_currReloadTimeInFrames(0) {}
 
-        void Magazine::setState() {
-            if(m_currAmmo > 0) {
+        void Magazine::setState(char key) {
+            if(m_currAmmo >= 0 && m_currState != State::reloading) {
                 m_currState = State::ready;
-            }else {
+            }else if(m_currAmmo < 0 || key == 'r') {
                 m_currState = State::reloading;
+            }else {
+                m_currState = State::ready;
             }
         }
 
@@ -38,6 +40,10 @@ namespace cs {
 
             return false;
         }
+
+        int Magazine::getCurrAmmo() const noexcept {return m_currAmmo;}
+
+        int Magazine::getMaxAmmo() const noexcept {return m_maxAmmo;}
 
     }
 
