@@ -49,7 +49,7 @@ namespace cs {
         m_isAlive = false;
     }
 
-    void Character::resetStats() {
+    void Character::resetStats() noexcept {
         m_statsMan.reset();
     }
 }
