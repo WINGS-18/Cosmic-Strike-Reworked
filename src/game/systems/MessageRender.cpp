@@ -5,11 +5,14 @@
 namespace cs {
 
     void MessageRender::showMessage(const Player& p) {
-        if(p.m_playerGun.isReloading()) {
-            std::cout << "Reloading..." << "\n";
+        if(p.getPlayerGun().isReloading()) {
+            std::cout << "Reloading...\n";
         }else {
-            std::cout << "Score: " << p.score << "\n";
+            std::cout << "Score: " << p.getScore() << "\n";
         }
+
+        std::cout << "\n" << p.getPlayerGun().getNumberOfBullets() << " / " 
+            << p.getPlayerGun().getTotalNumberOfBullets() << "\n";
     }
 
 }
