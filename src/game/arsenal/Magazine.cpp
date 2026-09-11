@@ -1,4 +1,5 @@
 #include "game/arsenal/Magazine.h"
+#include <iostream>
 
 namespace cs {
 
@@ -9,12 +10,13 @@ namespace cs {
               m_reloadTimeInFrames(reloadTime), m_currReloadTimeInFrames(0) {}
 
         void Magazine::setState(char key) {
-            if(m_currAmmo >= 0 && m_currState != State::reloading) {
-                m_currState = State::ready;
-            }else if(m_currAmmo < 0 || key == 'r') {
+            if((m_currAmmo <= 0 || key == 'r') && m_currAmmo < m_maxAmmo) {
                 m_currState = State::reloading;
-            }else {
+            }else if(m_currAmmo == m_maxAmmo || (m_currAmmo >= 0 && m_currState != State::reloading)) {
                 m_currState = State::ready;
+            }else {
+                if(m_currState != State::reloading)
+                    m_currState = State::ready;
             }
         }
 
